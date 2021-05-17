@@ -1,2 +1,0 @@
-# coinCopy
-commit test
