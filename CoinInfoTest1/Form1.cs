@@ -14,11 +14,11 @@ using System.Net;
 
 namespace CoinInfoTest1
 {
-   
-  
+
+
     public partial class Form1 : Form
     {
-  
+
 
         public Form1()
         {
@@ -30,10 +30,23 @@ namespace CoinInfoTest1
                 WebClient client = new WebClient();
                 client.Encoding = Encoding.UTF8;
 
-                // var reply = "{\"item\":" + client.DownloadString("https://api.upbit.com/v1/market/all") + "}";
                 var reply = client.DownloadString("https://api.upbit.com/v1/market/all");
-               
+
                 DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(reply, (typeof(DataTable)));
+                //string priceurl = "https://api.upbit.com/v1/candles/minutes/1?market=";
+                ////"KRW-BTC" +"&count=1"
+                //dataTable.Columns.Add("price");
+                //foreach (DataRow row in dataTable.Rows)
+                //{
+                //    string tempurl = priceurl + row["market"].ToString() + "&count=1";
+                //    WebClient tempclient = new WebClient();
+                //    tempclient.Encoding = Encoding.UTF8;
+                //    var candleinfo = tempclient.DownloadString(tempurl);
+                //    var price = JsonConvert.DeserializeObject<PriceEvent>(candleinfo);
+                //    row["price"] = price.opening_price.ToString();
+                   
+
+                //}
                 dataGridView1.DataSource = dataTable;
 
             }
@@ -43,38 +56,22 @@ namespace CoinInfoTest1
             }
         }
 
-        public class Coin
+        public class PriceEvent
         {
             public string market { get; set; }
-            public string korean_name { get; set; }
-            public string english_name { get; set; }
-
+            public DateTime candle_date_time_utc { get; set; }
+            public DateTime candle_date_time_kst { get; set; }
+            public double opening_price { get; set; }
+            public double high_price { get; set; }
+            public double low_price { get; set; }
+            public double trade_price { get; set; }
+            public long timestamp { get; set; }
+            public double candle_acc_trade_price { get; set; }
+            public double candle_acc_trade_volume { get; set; }
+            public int unit { get; set; }
         }
-        public class DataList
-        {
-            public List<Coin> StoriesMasters { get; set; }
-        }
-
-        //public void getItemData()
-
-        //{
-        //    WebClient client = new WebClient();
-        //    string reply = client.DownloadString("https://api.upbit.com/v1/market/all");
-            
-        //    //JObject jObj = JObject.Parse(reply);
-
-        //    DataTable dt = JsonConvert.DeserializeObject<DataTable>(reply);
-
-        //    dataGridView1.DataSource = dt;
-        //}
-        
     }
-    public class CoinItem
-    {
-        public string market { get; set; }
-        public string korean_name { get; set; }
-        public string english_name { get; set; }
-    }
+
 }
 
 
