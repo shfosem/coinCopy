@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="balance.cs" />
     <Compile Include="Chart.cs">
       <SubType>Form</SubType>
     </Compile>

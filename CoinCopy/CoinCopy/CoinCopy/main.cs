@@ -15,11 +15,25 @@ namespace CoinCopy
         public mainForm()
         {
             InitializeComponent();
+            balance b = new balance();
+            double totalAsset = b.getTotalAsset();
+            double cash = b.getCash();
+            double profitPercent = b.calcProfitPercentage();
+            double profit = b.getProfit();
+            double purchase = b.getPurchaseAmount();
+            double currentTotalPrice = b.getCurrentTotalPrice();
+
+            lblBalance.Text = totalAsset.ToString();
+            lbl_percent.Text = "0%";
+            profit_txt.Text = profit.ToString();
+            purchase_txt.Text = purchase.ToString();
+            evaluated_txt.Text = currentTotalPrice.ToString();
+            cash_txt.Text = cash.ToString();
         }
 
         private void main_Load(object sender, EventArgs e)
         {
-
+           
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -41,11 +55,7 @@ namespace CoinCopy
             Chart chartform = new Chart();
             chartform.Owner = this;
             chartform.Show();
-        }
-
-
-
-    
+        }    
 
 
     }

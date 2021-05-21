@@ -31,7 +31,6 @@ namespace CoinCopy
                 //"KRW-BTC" +"&count=1"
                 //dataTable.Columns.Add("price");
 
-
                 dgvCoin.DataSource = dataTable;
                 //get_price(dataTable);
 
