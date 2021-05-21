@@ -104,6 +104,7 @@ namespace CoinCopy
             chart.Owner = this.Owner;
             chart.lblName.Text = price[0].market.ToString();
             chart.lblPrice.Text = price[0].opening_price.ToString();
+            chart.code = code;
 
             chart.Show();
         }
