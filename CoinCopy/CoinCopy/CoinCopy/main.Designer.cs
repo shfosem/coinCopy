@@ -302,6 +302,7 @@ namespace CoinCopy
             this.btnReset.TabIndex = 3;
             this.btnReset.Text = "초기화";
             this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // btnSearch
             // 

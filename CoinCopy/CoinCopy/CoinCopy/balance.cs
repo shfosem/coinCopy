@@ -23,7 +23,6 @@ namespace CoinCopy
         //유가 총액 ( 현시점 기준으로 보유한 주식의 현 시가의 총합 )
         private double currentTotalPrice;
 
-
         public balance()
         {
             // 1억
