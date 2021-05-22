@@ -23,17 +23,11 @@ namespace CoinCopy
     {
         class PriceInfo
         {
-            //public string market { get; set; }
-            //public DateTime candle_date_time_utc { get; set; }
             public DateTime candle_date_time_kst { get; set; }
             public double opening_price { get; set; }
             public double high_price { get; set; }
             public double low_price { get; set; }
             public double trade_price { get; set; }
-            //public long timestamp { get; set; }
-            //public double candle_acc_trade_price { get; set; }
-            //public double candle_acc_trade_volume { get; set; }
-            //public int unit { get; set; }
         }
 
         class TradeInfo
@@ -43,7 +37,6 @@ namespace CoinCopy
             public double trade_volume { get; set; }
             public string ask_bid { get; set; }
         }
-
 
         private string name;
         public string code;
@@ -87,7 +80,9 @@ namespace CoinCopy
             ax = chart1.ChartAreas[0].AxisX;
             ay = chart1.ChartAreas[0].AxisY;
 
-            
+            this.tradethr = new Thread(new ThreadStart(onGoingTrade));
+            tradethr.Start();
+            tradeonoff = true;
         }
 
         private void requestChart(string kind, int num)
@@ -113,7 +108,6 @@ namespace CoinCopy
                 priceurl = "https://api.upbit.com/v1/candles/days?market=";
             else if(kind == "weeks")
                 priceurl = "https://api.upbit.com/v1/candles/weeks?market=";
-
            
             WebClient tempclient = new WebClient();
             tempclient.Encoding = Encoding.UTF8;
@@ -143,11 +137,7 @@ namespace CoinCopy
                     trade_price = price[i].trade_price
                 });
 
-
                 //adding data n high_price
-                //if (num == 0) //if candlestick is day or week
-               //     chart1.Series["Series1"].Points.AddXY(price[i].candle_date_time_kst, price[i].high_price);
-                //else
                     chart1.Series["Series1"].Points.AddXY(price[i].candle_date_time_kst.ToString("dd HH:mm:ss"), price[i].high_price);
 
                 //adding low / open / close
@@ -162,8 +152,6 @@ namespace CoinCopy
 
                 if (max < price[i].high_price)
                     max = price[i].high_price;
-
-                
 
             }
 
@@ -183,7 +171,6 @@ namespace CoinCopy
             }
             
             this.updatethr = new Thread(new ParameterizedThreadStart(updateCandle));
-            //updatethr.Start()
 
             if(kind == "minutes")
             {
@@ -201,11 +188,7 @@ namespace CoinCopy
                     updatethr.Start("60m");
             }
 
-            this.tradethr = new Thread(new ThreadStart(onGoingTrade));
-            tradethr.Start();
-
             thronoff = true;
-            tradeonoff = true;
             
         }
 
@@ -276,7 +259,6 @@ namespace CoinCopy
                   chart1.ChartAreas[0].CursorY.Position);
         }
 
-
         private void chart1_MouseWheel(object sender, MouseEventArgs e)
         {
             try
@@ -306,7 +288,6 @@ namespace CoinCopy
             catch { }
         }
         
-
         private static DateTime Delay(int MS)
         {
             DateTime ThisMoment = DateTime.Now;
@@ -345,8 +326,6 @@ namespace CoinCopy
             
             while (true)
             {
-                //MessageBox.Show(" ");
-                //string priceurl = "https://api.upbit.com/v1/candles/minutes/1?market=";
                 WebClient tempclient = new WebClient();
                 tempclient.Encoding = Encoding.UTF8;
 
@@ -358,19 +337,13 @@ namespace CoinCopy
 
                 bool samecandle = false;
 
-
-
-
                 if (Convert.ToString(kind) == "1m" || Convert.ToString(kind) == "3m" || Convert.ToString(kind) == "5m" 
                     || Convert.ToString(kind) == "10m" || Convert.ToString(kind) == "30m" || Convert.ToString(kind) == "60m")
                     samecandle = (price[0].candle_date_time_kst.ToString("dd HH:mm:ss") == chart1.Series["Series1"].Points[0].AxisLabel) ? true : false;
                 else if (Convert.ToString(kind) == "day")
-                    samecandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString()) ? true : false;
+                    samecandle = (price[0].candle_date_time_kst.Date.ToString("dd") == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString("dd")) ? true : false;
                 else if (Convert.ToString(kind) == "weeks")
-                    samecandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString()) ? true : false;
-
-
-
+                    samecandle = (price[0].candle_date_time_kst.Date.ToString("dd") == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString("dd")) ? true : false;
 
 
                 if (samecandle)
@@ -383,11 +356,6 @@ namespace CoinCopy
                         priceinfolist[0].opening_price = price[0].opening_price;
                         priceinfolist[0].trade_price = price[0].trade_price;
 
-                        //chart1.Series["Series1"].Points.RemoveAt(candleCount);
-
-                        
-
-                        //chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst.ToString("HH:mm:ss"), price[0].high_price);
 
                         chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
                         chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
@@ -410,9 +378,6 @@ namespace CoinCopy
                         });
 
 
-                        //adding data n high_price
-                        //chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst, price[0].high_price);
-
                         //하나씩 뒤로 미는 작업
                         for(int i = chart1.Series["Series1"].Points.Count - 1; i >0; i--)
                         {
@@ -432,14 +397,11 @@ namespace CoinCopy
 
                     }));
 
-
                     candleCount += 1;
-
 
                 }
 
                 Delay(1000);
-
             }
         }
 
@@ -519,7 +481,7 @@ namespace CoinCopy
 
             string tempurl = priceurl + code + "&count=5";
 
-            while (true)
+            while (tradeonoff)
             {
                 var candleinfo = tempclient.DownloadString(tempurl);
                 var trade = JsonConvert.DeserializeObject<List<TradeInfo>>(candleinfo);
@@ -532,8 +494,7 @@ namespace CoinCopy
                 for (int i = 0; i < 5; i++)
                 {
                     strbld[i].Clear();
-                    //strbld[i].Append(trade[i].ask_bid.ToString());
-                    //strbld[i].Append("\t");
+
                     utc2kst = Convert.ToDateTime(trade[i].trade_time_utc.ToString());
                     utc2kst = utc2kst.AddHours(9);
 
@@ -543,8 +504,10 @@ namespace CoinCopy
                     strbld[i].Append("  ");
                     strbld[i].Append(trade[i].trade_volume.ToString());
                 }
-                //try
-                //{
+                if (IsHandleCreated)
+                {
+                    //try
+                    //{
                     this.Invoke(new MethodInvoker(delegate ()
                     {
                         trdlabel1.Text = strbld[0].ToString();
@@ -577,14 +540,13 @@ namespace CoinCopy
                         else
                             trdlabel5.ForeColor = Color.Blue;
                     }));
-                //}
-                //catch (Exception e)
-                //{ }
+                    //}
+                    //catch (Exception e)
+                    //{ }
+                }
 
-                Delay(2000);
+                Delay(1000);
             }
-
-
         }
     }
 }
