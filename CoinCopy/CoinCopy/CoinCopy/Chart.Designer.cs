@@ -49,6 +49,13 @@ namespace CoinCopy
             this.candle1day = new System.Windows.Forms.ToolStripMenuItem();
             this.candle1w = new System.Windows.Forms.ToolStripMenuItem();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.trdlabel1 = new System.Windows.Forms.Label();
+            this.trdlabel3 = new System.Windows.Forms.Label();
+            this.trdlabel2 = new System.Windows.Forms.Label();
+            this.trdlabel4 = new System.Windows.Forms.Label();
+            this.trdlabel5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
@@ -175,6 +182,7 @@ namespace CoinCopy
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea1.AxisX.IsReversed = true;
             chartArea1.CursorX.Interval = 0D;
             chartArea1.CursorX.IsUserEnabled = true;
             chartArea1.CursorX.IsUserSelectionEnabled = true;
@@ -194,21 +202,97 @@ namespace CoinCopy
             series1.Name = "Series1";
             series1.YValuesPerPoint = 4;
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(745, 332);
+            this.chart1.Size = new System.Drawing.Size(1057, 484);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
             this.chart1.Click += new System.EventHandler(this.chart1_Click);
+            // 
+            // trdlabel1
+            // 
+            this.trdlabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trdlabel1.AutoSize = true;
+            this.trdlabel1.Location = new System.Drawing.Point(800, 18);
+            this.trdlabel1.Name = "trdlabel1";
+            this.trdlabel1.Size = new System.Drawing.Size(45, 15);
+            this.trdlabel1.TabIndex = 7;
+            this.trdlabel1.Text = "label2";
+            // 
+            // trdlabel3
+            // 
+            this.trdlabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trdlabel3.AutoSize = true;
+            this.trdlabel3.Location = new System.Drawing.Point(800, 58);
+            this.trdlabel3.Name = "trdlabel3";
+            this.trdlabel3.Size = new System.Drawing.Size(45, 15);
+            this.trdlabel3.TabIndex = 8;
+            this.trdlabel3.Text = "label3";
+            // 
+            // trdlabel2
+            // 
+            this.trdlabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trdlabel2.AutoSize = true;
+            this.trdlabel2.Location = new System.Drawing.Point(800, 38);
+            this.trdlabel2.Name = "trdlabel2";
+            this.trdlabel2.Size = new System.Drawing.Size(45, 15);
+            this.trdlabel2.TabIndex = 9;
+            this.trdlabel2.Text = "label4";
+            // 
+            // trdlabel4
+            // 
+            this.trdlabel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trdlabel4.AutoSize = true;
+            this.trdlabel4.Location = new System.Drawing.Point(800, 78);
+            this.trdlabel4.Name = "trdlabel4";
+            this.trdlabel4.Size = new System.Drawing.Size(45, 15);
+            this.trdlabel4.TabIndex = 10;
+            this.trdlabel4.Text = "label5";
+            // 
+            // trdlabel5
+            // 
+            this.trdlabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trdlabel5.AutoSize = true;
+            this.trdlabel5.Location = new System.Drawing.Point(800, 98);
+            this.trdlabel5.Name = "trdlabel5";
+            this.trdlabel5.Size = new System.Drawing.Size(45, 15);
+            this.trdlabel5.TabIndex = 11;
+            this.trdlabel5.Text = "label6";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Location = new System.Drawing.Point(789, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(280, 112);
+            this.label2.TabIndex = 13;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(716, 18);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 15);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "최근거래";
             // 
             // Chart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 476);
+            this.ClientSize = new System.Drawing.Size(1081, 628);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.trdlabel5);
+            this.Controls.Add(this.trdlabel4);
+            this.Controls.Add(this.trdlabel2);
+            this.Controls.Add(this.trdlabel3);
+            this.Controls.Add(this.trdlabel1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.lblPrice);
             this.Controls.Add(this.lbl2);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
             this.Name = "Chart";
             this.Text = "Chart";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Chart_FormClosing);
@@ -237,5 +321,12 @@ namespace CoinCopy
         private System.Windows.Forms.ToolStripMenuItem candle1day;
         private System.Windows.Forms.ToolStripMenuItem candle1w;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Label trdlabel1;
+        private System.Windows.Forms.Label trdlabel3;
+        private System.Windows.Forms.Label trdlabel2;
+        private System.Windows.Forms.Label trdlabel4;
+        private System.Windows.Forms.Label trdlabel5;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

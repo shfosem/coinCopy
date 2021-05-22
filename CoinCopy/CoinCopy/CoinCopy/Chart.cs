@@ -36,11 +36,23 @@ namespace CoinCopy
             //public int unit { get; set; }
         }
 
+        class TradeInfo
+        {
+            public string trade_time_utc { get; set; }
+            public double trade_price { get; set; }
+            public double trade_volume { get; set; }
+            public string ask_bid { get; set; }
+        }
+
 
         private string name;
         public string code;
+        
         public Thread updatethr;
         bool thronoff = false;
+
+        public Thread tradethr;
+        bool tradeonoff = false;
 
         Series chartSeries;
         List<PriceInfo> priceinfolist = new List<PriceInfo>();
@@ -130,10 +142,13 @@ namespace CoinCopy
                     low_price = price[i].low_price,
                     trade_price = price[i].trade_price
                 });
-                
+
 
                 //adding data n high_price
-                chart1.Series["Series1"].Points.AddXY(price[i].candle_date_time_kst, price[i].high_price);
+                //if (num == 0) //if candlestick is day or week
+               //     chart1.Series["Series1"].Points.AddXY(price[i].candle_date_time_kst, price[i].high_price);
+                //else
+                    chart1.Series["Series1"].Points.AddXY(price[i].candle_date_time_kst.ToString("dd HH:mm:ss"), price[i].high_price);
 
                 //adding low / open / close
                 chart1.Series["Series1"].Points[i].YValues[1] = price[i].low_price;
@@ -168,7 +183,7 @@ namespace CoinCopy
             }
             
             this.updatethr = new Thread(new ParameterizedThreadStart(updateCandle));
-            //updatethr.Start();
+            //updatethr.Start()
 
             if(kind == "minutes")
             {
@@ -186,7 +201,11 @@ namespace CoinCopy
                     updatethr.Start("60m");
             }
 
+            this.tradethr = new Thread(new ThreadStart(onGoingTrade));
+            tradethr.Start();
+
             thronoff = true;
+            tradeonoff = true;
             
         }
 
@@ -337,49 +356,44 @@ namespace CoinCopy
 
                 int candleCount = priceinfolist.Count - 1;
 
-                bool newcandle = false;
+                bool samecandle = false;
 
 
 
 
-                if (Convert.ToString(kind) == "1m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
-                else if (Convert.ToString(kind) == "3m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
-                else if (Convert.ToString(kind) == "5m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
-                else if (Convert.ToString(kind) == "10m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
-                else if (Convert.ToString(kind) == "30m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
-                else if (Convert.ToString(kind) == "60m")
-                    newcandle = (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString()) ? true : false;
+                if (Convert.ToString(kind) == "1m" || Convert.ToString(kind) == "3m" || Convert.ToString(kind) == "5m" 
+                    || Convert.ToString(kind) == "10m" || Convert.ToString(kind) == "30m" || Convert.ToString(kind) == "60m")
+                    samecandle = (price[0].candle_date_time_kst.ToString("dd HH:mm:ss") == chart1.Series["Series1"].Points[0].AxisLabel) ? true : false;
                 else if (Convert.ToString(kind) == "day")
-                    newcandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[candleCount].candle_date_time_kst.Date.ToString()) ? true : false;
+                    samecandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString()) ? true : false;
                 else if (Convert.ToString(kind) == "weeks")
-                    newcandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[candleCount].candle_date_time_kst.Date.ToString()) ? true : false;
+                    samecandle = (price[0].candle_date_time_kst.Date.ToString() == priceinfolist[priceinfolist.Count - 1].candle_date_time_kst.Date.ToString()) ? true : false;
 
 
 
 
 
-                if (price[0].candle_date_time_kst.Minute.ToString() == priceinfolist[candleCount].candle_date_time_kst.Minute.ToString())
+                if (samecandle)
                 {
                     this.Invoke(new MethodInvoker(delegate ()
                     {
-                        priceinfolist[candleCount].candle_date_time_kst = price[0].candle_date_time_kst;
-                        priceinfolist[candleCount].high_price = price[0].high_price;
-                        priceinfolist[candleCount].low_price = price[0].low_price;
-                        priceinfolist[candleCount].opening_price = price[0].opening_price;
-                        priceinfolist[candleCount].trade_price = price[0].trade_price;
+                        priceinfolist[0].candle_date_time_kst = price[0].candle_date_time_kst;
+                        priceinfolist[0].high_price = price[0].high_price;
+                        priceinfolist[0].low_price = price[0].low_price;
+                        priceinfolist[0].opening_price = price[0].opening_price;
+                        priceinfolist[0].trade_price = price[0].trade_price;
 
-                        chart1.Series["Series1"].Points.RemoveAt(candleCount);
+                        //chart1.Series["Series1"].Points.RemoveAt(candleCount);
 
-                        chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst, price[0].high_price);
+                        
 
-                        chart1.Series["Series1"].Points[candleCount].YValues[1] = price[0].low_price;
-                        chart1.Series["Series1"].Points[candleCount].YValues[2] = price[0].opening_price;
-                        chart1.Series["Series1"].Points[candleCount].YValues[3] = price[0].trade_price;
+                        //chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst.ToString("HH:mm:ss"), price[0].high_price);
+
+                        chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
+                        chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
+                        chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
+
+                        chart1.ResetAutoValues();
                     }));
                 }
                 else
@@ -397,12 +411,24 @@ namespace CoinCopy
 
 
                         //adding data n high_price
-                        chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst, price[0].high_price);
+                        //chart1.Series["Series1"].Points.AddXY(price[0].candle_date_time_kst, price[0].high_price);
+
+                        //하나씩 뒤로 미는 작업
+                        for(int i = chart1.Series["Series1"].Points.Count - 1; i >0; i--)
+                        {
+                            chart1.Series["Series1"].Points[i].AxisLabel = chart1.Series["Series1"].Points[i - 1].AxisLabel;
+                            chart1.Series["Series1"].Points[i].YValues[1] = chart1.Series["Series1"].Points[i - 1].YValues[1];
+                            chart1.Series["Series1"].Points[i].YValues[2] = chart1.Series["Series1"].Points[i - 1].YValues[2];
+                            chart1.Series["Series1"].Points[i].YValues[3] = chart1.Series["Series1"].Points[i - 1].YValues[3];
+                        }
 
                         //adding low / open / close
-                        chart1.Series["Series1"].Points[candleCount].YValues[1] = price[0].low_price;
-                        chart1.Series["Series1"].Points[candleCount].YValues[2] = price[0].opening_price;
-                        chart1.Series["Series1"].Points[candleCount].YValues[3] = price[0].trade_price;
+                        chart1.Series["Series1"].Points[0].AxisLabel = price[0].candle_date_time_kst.ToString("dd HH:mm:ss");
+                        chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
+                        chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
+                        chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
+
+                        chart1.ResetAutoValues();
 
                     }));
 
@@ -421,6 +447,8 @@ namespace CoinCopy
         {
             if(thronoff)
                 this.updatethr.Abort();
+            if (tradeonoff)
+                this.tradethr.Abort();
         }
 
 
@@ -471,18 +499,93 @@ namespace CoinCopy
                     break;
                 case "day":
                     candle1day.Checked = true;
-                    requestChart("days", 1);
+                    requestChart("days", 0);
                     ///
                     break;
                 case "week":
                     candle1w.Checked = true;
-                    requestChart("weeks", 1);
+                    requestChart("weeks", 0);
                     ///
                     break;
             }
 
         }
 
+        public void onGoingTrade()
+        {
+            string priceurl = "https://api.upbit.com/v1/trades/ticks?market=";
+            WebClient tempclient = new WebClient();
+            tempclient.Encoding = Encoding.UTF8;
+
+            string tempurl = priceurl + code + "&count=5";
+
+            while (true)
+            {
+                var candleinfo = tempclient.DownloadString(tempurl);
+                var trade = JsonConvert.DeserializeObject<List<TradeInfo>>(candleinfo);
+                DateTime utc2kst;
+
+                StringBuilder[] strbld = new StringBuilder[5];
+                for (int i = 0; i < strbld.Length; i++)
+                    strbld[i] = new StringBuilder("");
+
+                for (int i = 0; i < 5; i++)
+                {
+                    strbld[i].Clear();
+                    //strbld[i].Append(trade[i].ask_bid.ToString());
+                    //strbld[i].Append("\t");
+                    utc2kst = Convert.ToDateTime(trade[i].trade_time_utc.ToString());
+                    utc2kst = utc2kst.AddHours(9);
+
+                    strbld[i].Append(utc2kst.ToString("HH:mm:ss"));
+                    strbld[i].Append("  ");
+                    strbld[i].Append(trade[i].trade_price.ToString());
+                    strbld[i].Append("  ");
+                    strbld[i].Append(trade[i].trade_volume.ToString());
+                }
+                //try
+                //{
+                    this.Invoke(new MethodInvoker(delegate ()
+                    {
+                        trdlabel1.Text = strbld[0].ToString();
+                        if (trade[0].ask_bid.ToString() == "ASK")
+                            trdlabel1.ForeColor = Color.Red;
+                        else
+                            trdlabel1.ForeColor = Color.Blue;
+
+                        trdlabel2.Text = strbld[1].ToString();
+                        if (trade[1].ask_bid.ToString() == "ASK")
+                            trdlabel2.ForeColor = Color.Red;
+                        else
+                            trdlabel2.ForeColor = Color.Blue;
+
+                        trdlabel3.Text = strbld[2].ToString();
+                        if (trade[2].ask_bid.ToString() == "ASK")
+                            trdlabel3.ForeColor = Color.Red;
+                        else
+                            trdlabel3.ForeColor = Color.Blue;
+
+                        trdlabel4.Text = strbld[3].ToString();
+                        if (trade[3].ask_bid.ToString() == "ASK")
+                            trdlabel4.ForeColor = Color.Red;
+                        else
+                            trdlabel4.ForeColor = Color.Blue;
+
+                        trdlabel5.Text = strbld[4].ToString();
+                        if (trade[4].ask_bid.ToString() == "ASK")
+                            trdlabel5.ForeColor = Color.Red;
+                        else
+                            trdlabel5.ForeColor = Color.Blue;
+                    }));
+                //}
+                //catch (Exception e)
+                //{ }
+
+                Delay(2000);
+            }
+
+
+        }
     }
 }
  
