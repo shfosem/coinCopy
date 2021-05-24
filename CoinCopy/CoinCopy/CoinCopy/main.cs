@@ -44,14 +44,14 @@ namespace CoinCopy
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            Search searchform = new Search();
+            Search searchform = new Search(userBalance);
             searchform.Owner = this;
             searchform.Show();
         }
 
         private void cmsRequest_Click(object sender, EventArgs e)
         {
-            Request requestform = new Request("");
+            Request requestform = new Request("", userBalance);
             requestform.Owner = this;
             requestform.Show();
         }

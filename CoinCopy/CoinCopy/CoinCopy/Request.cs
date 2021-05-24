@@ -13,9 +13,10 @@ namespace CoinCopy
     public partial class Request : Form
     {
         string marketPrice;
-
+        public balance userBalance;
         public Request(string mPrice, balance uBalance)
         {
+            userBalance = uBalance;
             marketPrice = mPrice;
             InitializeComponent();
             cmbRequest.Items.Add("매수");
@@ -24,11 +25,12 @@ namespace CoinCopy
 
         private void stockNumberTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // 숫자와 백스페이스만 입력 받도록 하는 코드
-            if ( !(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))
-            {
-                e.Handled = true;
-            }
+            // 숫자와 백스페이스, . 만 입력 받도록 하는 코드
+            if ( char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back) || ( e.KeyChar == '.' ) ) {
+                e.Handled = false;
+            } else
+                e.Handled = true;    
+            
         }
         /*
          * selection == 0 : 매수 , selection == 1 : 매도         
@@ -40,12 +42,20 @@ namespace CoinCopy
 
            if (selection == 0)
             {
-                double howMany = Int32.Parse(stockNumberTextBox.Text);
-                double marketPriceInteger = Int32.Parse(marketPrice);
-                
+                double howMany = Double.Parse(stockNumberTextBox.Text);
+               
                 if ( rdoMarketPrice.Checked == true )
                 {
+                    double marketPriceDouble = Double.Parse(marketPrice);
+                    double totalCost = howMany * marketPriceDouble;
                     
+                    if (userBalance.getCash() < totalCost)
+                    {
+                        MessageBox.Show("금액 부족\n" + "소유 현금 : " + userBalance.getCash() +"\n" + "가격 총합 : " + totalCost ,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+
                 }
             }
         }

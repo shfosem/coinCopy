@@ -26,7 +26,7 @@ namespace CoinCopy
         public balance()
         {
             // 1억
-            cash = 100000000;
+            cash = 100000000000;
             totalAsset = cash;
             profit = 0;
             purchaseAmount = 0;
