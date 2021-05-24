@@ -357,12 +357,15 @@ namespace CoinCopy
                         priceinfolist[0].opening_price = price[0].opening_price;
                         priceinfolist[0].trade_price = price[0].trade_price;
 
+                        chart1.Series["Series1"].Points.RemoveAt(0);
+
+                        chart1.Series["Series1"].Points.InsertXY(0, price[0].candle_date_time_kst.ToString("dd HH:mm:ss"), price[0].high_price);
 
                         chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
                         chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
                         chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
 
-                        chart1.ResetAutoValues();
+                        //chart1.ResetAutoValues();
                     }));
                 }
                 else
@@ -378,7 +381,12 @@ namespace CoinCopy
                             trade_price = price[0].trade_price
                         });
 
+                        chart1.Series["Series1"].Points.InsertXY(0, price[0].candle_date_time_kst.ToString("dd HH:mm:ss"), price[0].high_price);
 
+                        chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
+                        chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
+                        chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
+                        /*
                         //하나씩 뒤로 미는 작업
                         for(int i = chart1.Series["Series1"].Points.Count - 1; i >0; i--)
                         {
@@ -395,6 +403,7 @@ namespace CoinCopy
                         chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
 
                         chart1.ResetAutoValues();
+                        */
 
                     }));
 
@@ -552,7 +561,7 @@ namespace CoinCopy
 
         private void btnOpenRequest_Click(object sender, EventArgs e)
         {
-            Request r = new Request(lblName.Text, lblPrice.Text, mForm.userBalance, mForm);
+            Request r = new Request(code, lblName.Text, lblPrice.Text, mForm.userBalance, mForm);
             r.Owner = this;
             r.Show();
         }
