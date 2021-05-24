@@ -12,16 +12,17 @@ namespace CoinCopy
 {
     public partial class mainForm : Form
     {
+        balance userBalance;
         public mainForm()
         {
             InitializeComponent();
-            balance b = new balance();
-            double totalAsset = b.getTotalAsset();
-            double cash = b.getCash();
-            double profitPercent = b.calcProfitPercentage();
-            double profit = b.getProfit();
-            double purchase = b.getPurchaseAmount();
-            double currentTotalPrice = b.getCurrentTotalPrice();
+            userBalance = new balance();
+            double totalAsset = userBalance.getTotalAsset();
+            double cash = userBalance.getCash();
+            double profitPercent = userBalance.calcProfitPercentage();
+            double profit = userBalance.getProfit();
+            double purchase = userBalance.getPurchaseAmount();
+            double currentTotalPrice = userBalance.getCurrentTotalPrice();
 
             lblBalance.Text = totalAsset.ToString();
             lbl_percent.Text = "0%";
@@ -29,6 +30,11 @@ namespace CoinCopy
             purchase_txt.Text = purchase.ToString();
             evaluated_txt.Text = currentTotalPrice.ToString();
             cash_txt.Text = cash.ToString();
+        }
+
+        private double returnCash()
+        {
+            return userBalance.getCash();
         }
 
         private void main_Load(object sender, EventArgs e)
@@ -45,7 +51,7 @@ namespace CoinCopy
 
         private void cmsRequest_Click(object sender, EventArgs e)
         {
-            Request requestform = new Request();
+            Request requestform = new Request("");
             requestform.Owner = this;
             requestform.Show();
         }
@@ -60,13 +66,13 @@ namespace CoinCopy
         private void btnReset_Click(object sender, EventArgs e)
         {
             // 잔고 초기화
-            balance b = new balance();
-            double totalAsset = b.getTotalAsset();
-            double cash = b.getCash();
-            double profitPercent = b.calcProfitPercentage();
-            double profit = b.getProfit();
-            double purchase = b.getPurchaseAmount();
-            double currentTotalPrice = b.getCurrentTotalPrice();
+            userBalance = new balance();
+            double totalAsset = userBalance.getTotalAsset();
+            double cash = userBalance.getCash();
+            double profitPercent = userBalance.calcProfitPercentage();
+            double profit = userBalance.getProfit();
+            double purchase = userBalance.getPurchaseAmount();
+            double currentTotalPrice = userBalance.getCurrentTotalPrice();
 
             lblBalance.Text = totalAsset.ToString();
             lbl_percent.Text = "0%";

@@ -75,7 +75,7 @@ namespace CoinCopy
             this.evaluated_price,
             this.purchase_price});
             this.balanceDgv.ContextMenuStrip = this.cms;
-            this.balanceDgv.Location = new System.Drawing.Point(10, 196);
+            this.balanceDgv.Location = new System.Drawing.Point(12, 201);
             this.balanceDgv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.balanceDgv.Name = "balanceDgv";
             this.balanceDgv.RowHeadersWidth = 51;
@@ -151,14 +151,14 @@ namespace CoinCopy
             // cms_chart
             // 
             this.cms_chart.Name = "cms_chart";
-            this.cms_chart.Size = new System.Drawing.Size(98, 22);
+            this.cms_chart.Size = new System.Drawing.Size(180, 22);
             this.cms_chart.Text = "차트";
             this.cms_chart.Click += new System.EventHandler(this.cms_chart_Click);
             // 
             // cmsRequest
             // 
             this.cmsRequest.Name = "cmsRequest";
-            this.cmsRequest.Size = new System.Drawing.Size(98, 22);
+            this.cmsRequest.Size = new System.Drawing.Size(180, 22);
             this.cmsRequest.Text = "주문";
             this.cmsRequest.Click += new System.EventHandler(this.cmsRequest_Click);
             // 
@@ -343,7 +343,6 @@ namespace CoinCopy
         private System.Windows.Forms.Label lbl_percent;
         private System.Windows.Forms.Label lbl_profit;
         private System.Windows.Forms.Label lblWon;
-        private System.Windows.Forms.Label lblBalance;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label label3;
@@ -365,6 +364,7 @@ namespace CoinCopy
         private System.Windows.Forms.DataGridViewTextBoxColumn profit_won;
         private System.Windows.Forms.DataGridViewTextBoxColumn evaluated_price;
         private System.Windows.Forms.DataGridViewTextBoxColumn purchase_price;
+        internal System.Windows.Forms.Label lblBalance;
     }
 }
 

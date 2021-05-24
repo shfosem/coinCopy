@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoinCopy
 {
-    class balance
+    public class balance
     {
         // 자산 ( 보유 현금 + 유가 총액 ) 
         private double totalAsset;

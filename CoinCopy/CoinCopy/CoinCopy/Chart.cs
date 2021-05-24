@@ -548,6 +548,13 @@ namespace CoinCopy
                 Delay(1000);
             }
         }
+
+        private void btnOpenRequest_Click(object sender, EventArgs e)
+        {
+            Request r = new Request(lblPrice.Text);
+            r.Owner = this;
+            r.Show();
+        }
     }
 }
  
