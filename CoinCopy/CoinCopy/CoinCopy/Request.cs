@@ -12,16 +12,18 @@ namespace CoinCopy
 {
     public partial class Request : Form
     {
-        string marketPrice;
+        private string marketPrice;
+        private string coinName;
         public balance userBalance;
         mainForm mForm;
-        public Request(string mPrice, balance uBalance, mainForm mF)
+        public Request(string coinName, string mPrice, balance uBalance, mainForm mF)
         {
             InitializeComponent();
             cmbRequest.Items.Add("매수");
             cmbRequest.Items.Add("매도");
             userBalance = uBalance;
             marketPrice = mPrice;
+            this.coinName = coinName;
             mForm = mF;
         }
 
@@ -31,8 +33,7 @@ namespace CoinCopy
             if ( char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back) || ( e.KeyChar == '.' ) ) {
                 e.Handled = false;
             } else
-                e.Handled = true;    
-            
+                e.Handled = true;            
         }
         /*
          * selection == 0 : 매수 , selection == 1 : 매도         
@@ -57,13 +58,11 @@ namespace CoinCopy
                         return;
                     }
 
-                    userBalance.setProfit(9999);
-                    userBalance.setCurrentTotalPrice(9898);
-                    userBalance.setCash(99999);
-                    userBalance.setPurchaseAmount(5555);
-                    userBalance.setTotalAsset(19199);
+                    mForm.buy_data.buyQuantity = howMany;
+                    mForm.calculation();
 
-                    mForm.setBalance(userBalance);
+                    MessageBox.Show("매수 채결");                    
+                    this.Close();
                 }
             }
         }

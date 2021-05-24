@@ -14,14 +14,12 @@ using Newtonsoft.Json.Linq;
 namespace CoinCopy
 {
     public partial class Search : Form
-    {
-        public balance userBalance;
+    {        
         mainForm mForm;
         public Search(balance uBalance, mainForm mF)
         {
-            userBalance = uBalance;
+           
             mForm = mF;
-
 
             InitializeComponent();
             try
@@ -90,8 +88,6 @@ namespace CoinCopy
 
         private void dgvCoin_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-
-
             int n = dgvCoin.SelectedRows[0].Index;
             string code = dgvCoin.Rows[n].Cells[0].Value.ToString();
             loadCoinInfo(code);
@@ -115,12 +111,14 @@ namespace CoinCopy
             var candleinfo = tempclient.DownloadString(tempurl);
             var price = JsonConvert.DeserializeObject<List<PriceEvent>>(candleinfo);
 
+            mForm.buy_data.stockName = price[0].market.ToString();
+            mForm.buy_data.buyCost = price[0].opening_price;
+
             Chart chart = new Chart(mForm);
             chart.Owner = this.Owner;
             chart.lblName.Text = price[0].market.ToString();
             chart.lblPrice.Text = price[0].opening_price.ToString();
-            chart.code = code;
-            
+            chart.code = code;            
             chart.Show();
         }
 

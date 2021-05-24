@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="balance.cs" />
+    <Compile Include="buyData.cs" />
     <Compile Include="Chart.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +72,7 @@
     <Compile Include="Request.Designer.cs">
       <DependentUpon>Request.cs</DependentUpon>
     </Compile>
+    <Compile Include="rowData.cs" />
     <Compile Include="Search.cs">
       <SubType>Form</SubType>
     </Compile>

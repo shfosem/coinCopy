@@ -53,7 +53,6 @@ namespace CoinCopy
 
         Axis ax;
         Axis ay;
-
       
 
         public Chart(mainForm mF)
@@ -553,7 +552,7 @@ namespace CoinCopy
 
         private void btnOpenRequest_Click(object sender, EventArgs e)
         {
-            Request r = new Request(lblPrice.Text, mForm.userBalance, mForm);
+            Request r = new Request(lblName.Text, lblPrice.Text, mForm.userBalance, mForm);
             r.Owner = this;
             r.Show();
         }
