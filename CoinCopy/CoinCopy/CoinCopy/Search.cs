@@ -31,11 +31,18 @@ namespace CoinCopy
 
                 DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(reply, (typeof(DataTable)));
 
-                //"KRW-BTC" +"&count=1"
-                //dataTable.Columns.Add("price");
+                for (int i = dataTable.Rows.Count - 1; i >= 0; i--) //KRW 빼고 모두 삭제
+                {
+                    DataRow dr = dataTable.Rows[i];
+                    if (!dr["market"].ToString().Contains("KRW"))
+                        dr.Delete();
+                }
+
+                dataTable.AcceptChanges();
+
 
                 dgvCoin.DataSource = dataTable;
-                //get_price(dataTable);
+
 
             }
             catch (Exception e)
@@ -45,11 +52,13 @@ namespace CoinCopy
         }
         private void get_price(DataTable dataTable)
         {
+
             string priceurl = "https://api.upbit.com/v1/candles/minutes/1?market=";
             WebClient tempclient = new WebClient();
             tempclient.Encoding = Encoding.UTF8;
             foreach (DataRow row in dataTable.Rows)
-            {
+            {     
+                //"KRW-BTC" +"&count=1"
                 string tempurl = priceurl + row["market"].ToString() + "&count=1";
                 var candleinfo = tempclient.DownloadString(tempurl);
                 var price = JsonConvert.DeserializeObject<List<PriceEvent>>(candleinfo);
@@ -110,6 +119,34 @@ namespace CoinCopy
             chart.code = code;
             chart.userBalance = this.userBalance;
             chart.Show();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            // 검색하면 목표 아이템으로 Selected와 Focus 이동 (한글이름)
+            string searchValue = txtCoinName.Text;
+            dgvCoin.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            int rowIndex = -1;
+            try
+            {
+                foreach (DataGridViewRow row in dgvCoin.Rows)
+                {
+                    if (row.Cells[1].Value.ToString().Contains(searchValue))
+                    {
+                        rowIndex = row.Index;
+                        dgvCoin.ClearSelection();
+                        row.Selected = true;
+                        dgvCoin.FirstDisplayedScrollingRowIndex = rowIndex;
+                        dgvCoin.Focus();
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 
