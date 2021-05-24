@@ -44,21 +44,21 @@ namespace CoinCopy
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            Search searchform = new Search(userBalance);
+            Search searchform = new Search(userBalance, this);
             searchform.Owner = this;
             searchform.Show();
         }
 
         private void cmsRequest_Click(object sender, EventArgs e)
         {
-            Request requestform = new Request("", userBalance);
+            Request requestform = new Request("", userBalance, this);
             requestform.Owner = this;
             requestform.Show();
         }
 
         private void cms_chart_Click(object sender, EventArgs e)
         {
-            Chart chartform = new Chart();
+            Chart chartform = new Chart(this);
             chartform.Owner = this;
             chartform.Show();
         }
@@ -80,8 +80,24 @@ namespace CoinCopy
             purchase_txt.Text = purchase.ToString();
             evaluated_txt.Text = currentTotalPrice.ToString();
             cash_txt.Text = cash.ToString();
-
             
+        }
+
+        public void setBalance(balance bl)
+        {
+            double totalAsset = bl.getTotalAsset();
+            double cash = bl.getCash();
+            double profitPercent = bl.calcProfitPercentage();
+            double profit = bl.getProfit();
+            double purchase = bl.getPurchaseAmount();
+            double currentTotalPrice = bl.getCurrentTotalPrice();
+
+            lblBalance.Text = totalAsset.ToString();
+            lbl_percent.Text = profitPercent.ToString();
+            profit_txt.Text = profit.ToString();
+            purchase_txt.Text = purchase.ToString();
+            evaluated_txt.Text = currentTotalPrice.ToString();
+            cash_txt.Text = cash.ToString();
         }
     }
 }

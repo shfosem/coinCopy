@@ -14,13 +14,15 @@ namespace CoinCopy
     {
         string marketPrice;
         public balance userBalance;
-        public Request(string mPrice, balance uBalance)
+        mainForm mForm;
+        public Request(string mPrice, balance uBalance, mainForm mF)
         {
-            userBalance = uBalance;
-            marketPrice = mPrice;
             InitializeComponent();
             cmbRequest.Items.Add("매수");
             cmbRequest.Items.Add("매도");
+            userBalance = uBalance;
+            marketPrice = mPrice;
+            mForm = mF;
         }
 
         private void stockNumberTextBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -55,7 +57,13 @@ namespace CoinCopy
                         return;
                     }
 
+                    userBalance.setProfit(9999);
+                    userBalance.setCurrentTotalPrice(9898);
+                    userBalance.setCash(99999);
+                    userBalance.setPurchaseAmount(5555);
+                    userBalance.setTotalAsset(19199);
 
+                    mForm.setBalance(userBalance);
                 }
             }
         }

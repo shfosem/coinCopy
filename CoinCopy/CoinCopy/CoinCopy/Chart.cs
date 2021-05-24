@@ -21,6 +21,7 @@ namespace CoinCopy
 
     public partial class Chart : Form
     {
+        mainForm mForm;
         class PriceInfo
         {
             public DateTime candle_date_time_kst { get; set; }
@@ -53,12 +54,13 @@ namespace CoinCopy
         Axis ax;
         Axis ay;
 
-        public balance userBalance;
+      
 
-        public Chart()
+        public Chart(mainForm mF)
         {
             InitializeComponent();
-
+            mForm = mF;
+            
             chartSeries = chart1.Series["Series1"];
             chart1.Series["Series1"]["PriceUpColor"] = "Red";
             chart1.Series["Series1"]["PriceDownColor"] = "Blue";
@@ -551,7 +553,7 @@ namespace CoinCopy
 
         private void btnOpenRequest_Click(object sender, EventArgs e)
         {
-            Request r = new Request(lblPrice.Text, userBalance);
+            Request r = new Request(lblPrice.Text, mForm.userBalance, mForm);
             r.Owner = this;
             r.Show();
         }
