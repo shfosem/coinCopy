@@ -53,11 +53,11 @@ namespace CoinCopy
         Axis ax;
         Axis ay;
 
+        public balance userBalance;
 
         public Chart()
         {
             InitializeComponent();
-
 
             chartSeries = chart1.Series["Series1"];
             chart1.Series["Series1"]["PriceUpColor"] = "Red";
@@ -551,7 +551,7 @@ namespace CoinCopy
 
         private void btnOpenRequest_Click(object sender, EventArgs e)
         {
-            Request r = new Request(lblPrice.Text);
+            Request r = new Request(lblPrice.Text, userBalance);
             r.Owner = this;
             r.Show();
         }

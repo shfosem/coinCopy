@@ -15,8 +15,11 @@ namespace CoinCopy
 {
     public partial class Search : Form
     {
-        public Search()
+        public balance userBalance;
+        public Search(balance uBalance)
         {
+            userBalance = uBalance;
+
             InitializeComponent();
             try
             {
@@ -105,7 +108,7 @@ namespace CoinCopy
             chart.lblName.Text = price[0].market.ToString();
             chart.lblPrice.Text = price[0].opening_price.ToString();
             chart.code = code;
-
+            chart.userBalance = this.userBalance;
             chart.Show();
         }
     }

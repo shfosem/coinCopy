@@ -12,7 +12,7 @@ namespace CoinCopy
 {
     public partial class mainForm : Form
     {
-        balance userBalance;
+        public balance userBalance;
         public mainForm()
         {
             InitializeComponent();

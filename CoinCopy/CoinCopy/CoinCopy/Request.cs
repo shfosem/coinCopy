@@ -13,7 +13,8 @@ namespace CoinCopy
     public partial class Request : Form
     {
         string marketPrice;
-        public Request(string mPrice)
+
+        public Request(string mPrice, balance uBalance)
         {
             marketPrice = mPrice;
             InitializeComponent();
