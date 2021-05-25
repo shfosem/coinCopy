@@ -46,3 +46,19 @@ C:\Users\ssh98\Desktop\3학년 1학기\응소실\팀플\github\CoinCopy\coinCopy
 C:\Users\ssh98\Desktop\3학년 1학기\응소실\팀플\github\CoinCopy\coinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.csproj.CopyComplete
 C:\Users\ssh98\Desktop\3학년 1학기\응소실\팀플\github\CoinCopy\coinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.exe
 C:\Users\ssh98\Desktop\3학년 1학기\응소실\팀플\github\CoinCopy\coinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.pdb
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\bin\Debug\CoinCopy.exe.config
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\bin\Debug\CoinCopy.exe
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\bin\Debug\CoinCopy.pdb
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\bin\Debug\Newtonsoft.Json.dll
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\bin\Debug\Newtonsoft.Json.xml
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.csprojAssemblyReference.cache
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.Chart.resources
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.mainForm.resources
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.Properties.Resources.resources
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.Request.resources
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.Search.resources
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.csproj.GenerateResource.cache
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.csproj.CoreCompileInputs.cache
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.csproj.CopyComplete
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.exe
+C:\Users\cid2r\Documents\GitHub\real\coinCopy\CoinCopy\CoinCopy\CoinCopy\obj\Debug\CoinCopy.pdb

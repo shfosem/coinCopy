@@ -51,9 +51,9 @@ namespace CoinCopy
 
         private void cmsRequest_Click(object sender, EventArgs e)
         {
-            Request requestform = new Request("","", userBalance, this);
-            requestform.Owner = this;
-            requestform.Show();
+            //Request requestform = new Request("","", userBalance, this);
+            //requestform.Owner = this;
+            //requestform.Show();
         }
 
         private void cms_chart_Click(object sender, EventArgs e)
