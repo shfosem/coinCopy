@@ -18,6 +18,7 @@ namespace CoinCopy
     {
         public balance userBalance;       
         public buyData buy_data;
+        public sellData sell_data;
 
         Thread profitCalc;
 
@@ -29,6 +30,7 @@ namespace CoinCopy
             InitializeComponent();
             userBalance = new balance();           
             buy_data = new buyData();
+            sell_data = new sellData();
             
             double totalAsset = userBalance.getTotalAsset();
             double cash = userBalance.getCash();
@@ -129,6 +131,7 @@ namespace CoinCopy
             int checkExistance = 0;
            
             DataGridViewRow tempRow = new DataGridViewRow();
+
             for ( i = 0; i < balanceDgv.Rows.Count; i++)
             {
                 tempRow = balanceDgv.Rows[i];
@@ -154,15 +157,13 @@ namespace CoinCopy
                 tempRow.Cells[7].Value = totalCost;
             }
 
-
             double cash = userBalance.getCash();
             cash -= buy_data.buyCost * buy_data.buyQuantity;
             userBalance.setCash(cash);
 
             double totalBuyCost = userBalance.getPurchaseAmount();
             totalBuyCost += buy_data.buyCost * buy_data.buyQuantity;
-            userBalance.setPurchaseAmount(totalBuyCost);
-            
+            userBalance.setPurchaseAmount(totalBuyCost);            
 
         }
 
@@ -279,8 +280,6 @@ namespace CoinCopy
                 Delay(500);
             }
 
-
-
         }
         private static DateTime Delay(int MS)
         {
@@ -301,5 +300,34 @@ namespace CoinCopy
         {
            profitCalc.Abort();
         }
+
+        public int sellCalc()
+        {
+            int i = 0;
+            int checkExistance = 0;
+
+            DataGridViewRow tempRow = new DataGridViewRow();
+
+            for (i = 0; i < balanceDgv.Rows.Count; i++)
+            {
+                tempRow = balanceDgv.Rows[i];
+                if ((string)tempRow.Cells[0].Value == sell_data.stockName)
+                {
+                    checkExistance = 1;
+                    break;
+                }
+            }
+
+            if (checkExistance == 0)
+                return 0;
+
+            if (sell_data.sellQuantity > (double)tempRow.Cells[1].Value)
+                return 1;
+
+            
+
+            return 2;
+        }
+
     }
 }

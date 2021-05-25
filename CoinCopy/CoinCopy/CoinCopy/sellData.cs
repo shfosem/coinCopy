@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace CoinCopy
 {
-    public class buyData
+    public class sellData
     {
         public string stockName;
-        public double buyQuantity;
-        public double buyCost;
-        
+        public double sellQuantity;
+        public double sellCost;
     }
 }

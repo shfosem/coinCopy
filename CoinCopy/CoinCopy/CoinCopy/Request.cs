@@ -104,9 +104,30 @@ namespace CoinCopy
 
                     Thread buylimit = new Thread(new ParameterizedThreadStart(limitOrder_BuyingPoint));
                     buylimit.Start(parameters);
-
                 }
            }
+
+           if ( selection == 1 && stockNumberTextBox.Text != null)
+           {
+                double howMany = Double.Parse(stockNumberTextBox.Text);
+                double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
+                double totalCost = howMany * marketPriceDouble;
+
+                mForm.sell_data.stockName = this.coinName;
+                mForm.sell_data.sellCost = totalCost;
+                mForm.sell_data.sellQuantity = howMany;
+
+                int result = mForm.sellCalc();
+
+                if ( result == 0)
+                {
+                    MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);                   
+                } 
+
+
+           }
+
+
         }
 
         private void rdoCustomPrice_MouseClick(object sender, MouseEventArgs e)
