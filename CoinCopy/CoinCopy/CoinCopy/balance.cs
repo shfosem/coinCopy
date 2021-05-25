@@ -9,22 +9,22 @@ namespace CoinCopy
     public class balance
     {
         // 자산 ( 보유 현금 + 유가 총액 ) 
-        private double totalAsset;
+        private decimal totalAsset;
 
         // 보유 현금
-        private double cash;
+        private decimal cash;
 
         //손익 금액 (totalPrice - purchaseCost ) 
-        private double profit;
+        private decimal profit;
 
         //매입 금액
-        private double purchaseAmount;
+        private decimal purchaseAmount;
 
         //유가 총액 ( 현시점 기준으로 보유한 주식의 현 시가의 총합 )
-        private double currentTotalPrice;
+        private decimal currentTotalPrice;
 
         //수익률
-        private double profitPercentage;
+        private decimal profitPercentage;
 
         public balance()
         {
@@ -37,12 +37,12 @@ namespace CoinCopy
             profitPercentage = 0;
         }
 
-        public double getProfitPercentage()
+        public decimal getProfitPercentage()
         {
             return this.profitPercentage;
         }
 
-        public void setProfitPercentage(double percentage)
+        public void setProfitPercentage(decimal percentage)
         {
             this.profitPercentage = percentage; 
         }
@@ -52,51 +52,51 @@ namespace CoinCopy
             this.profitPercentage = this.profit / this.purchaseAmount * 100;
         }
 
-        public double getTotalAsset()
+        public decimal getTotalAsset()
         {
             return this.totalAsset;
         }
-        public void setTotalAsset(double amount)
+        public void setTotalAsset(decimal amount)
         {
             this.totalAsset = amount;   
         }
 
 
-        public double getCash()
+        public decimal getCash()
         {
             return this.cash;
         }
-        public void setCash(double amount)
+        public void setCash(decimal amount)
         {
             this.cash = amount;
         }
 
 
-        public double getProfit()
+        public decimal getProfit()
         {
             return (this.purchaseAmount - this.currentTotalPrice);
         }
-        public void setProfit(double amount)
+        public void setProfit(decimal amount)
         {
             this.profit = amount;
         }
 
 
-        public double getPurchaseAmount()
+        public decimal getPurchaseAmount()
         {
             return this.purchaseAmount;
         }
-        public void setPurchaseAmount(double amount)
+        public void setPurchaseAmount(decimal amount)
         {
             this.purchaseAmount = amount;
         }
 
 
-        public double getCurrentTotalPrice()
+        public decimal getCurrentTotalPrice()
         {
             return this.currentTotalPrice;
         }
-        public void setCurrentTotalPrice(double amount)
+        public void setCurrentTotalPrice(decimal amount)
         {
             this.currentTotalPrice = amount;
         }
@@ -107,7 +107,7 @@ namespace CoinCopy
          * 퍼센트 반환하는 함수
          * 소수점 셋째 자리 반올림
          */
-        public double calcProfitPercentage()
+        public decimal calcProfitPercentage()
         {
             return Math.Round(this.profit / this.purchaseAmount * 100 , 3);
         }

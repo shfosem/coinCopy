@@ -202,8 +202,8 @@ namespace CoinCopy
                 int start = (int)e.Axis.ScaleView.ViewMinimum;
                 int end = (int)e.Axis.ScaleView.ViewMaximum;
 
-                double max = (double)e.ChartArea.AxisY.ScaleView.ViewMaximum;
-                double min = (double)e.ChartArea.AxisY.ScaleView.ViewMinimum;
+                decimal max = (decimal)e.ChartArea.AxisY.ScaleView.ViewMaximum;
+                decimal min = (decimal)e.ChartArea.AxisY.ScaleView.ViewMinimum;
 
                 this.chart1.ChartAreas[0].AxisY.Minimum = priceinfolist[0].low_price;
                 //min = priceinfolist[start].low_price;

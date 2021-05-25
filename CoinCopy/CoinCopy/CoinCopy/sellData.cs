@@ -9,7 +9,7 @@ namespace CoinCopy
     public class sellData
     {
         public string stockName;
-        public double sellQuantity;
-        public double sellCost;
+        public decimal sellQuantity;
+        public decimal sellCost;
     }
 }
