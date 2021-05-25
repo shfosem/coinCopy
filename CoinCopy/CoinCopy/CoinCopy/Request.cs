@@ -63,14 +63,13 @@ namespace CoinCopy
             int selection = cmbRequest.SelectedIndex;
 
            if (selection == 0 && stockNumberTextBox.Text != null)
-            {
+           {
                 double howMany = Double.Parse(stockNumberTextBox.Text);
                
                 if (rdoMarketPrice.Checked)
                 {
                     //double marketPriceDouble = Double.Parse(marketPrice); =>
                     double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
-
                     double totalCost = howMany * marketPriceDouble;
                     
                     if (userBalance.getCash() < totalCost)
@@ -87,14 +86,14 @@ namespace CoinCopy
                     MessageBox.Show("매수 채결");                    
                     //this.Close();
                 }
-                else if(rdoCustomPrice.Checked)
+                else if (rdoCustomPrice.Checked)
                 {
                     double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
                     double totalCost = howMany * marketPriceDouble;
 
                     List<object> parameters = new List<object>();
 
-                    if(userBalance.getCash() < totalCost)
+                    if (userBalance.getCash() < totalCost)
                     {
                         MessageBox.Show("금액 부족\n" + "소유 현금 : " + userBalance.getCash() + "\n" + "가격 총합 : " + totalCost, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -106,9 +105,8 @@ namespace CoinCopy
                     Thread buylimit = new Thread(new ParameterizedThreadStart(limitOrder_BuyingPoint));
                     buylimit.Start(parameters);
 
-
                 }
-            }
+           }
         }
 
         private void rdoCustomPrice_MouseClick(object sender, MouseEventArgs e)
@@ -135,7 +133,6 @@ namespace CoinCopy
                 var candleinfo = tempclient.DownloadString(tempurl);
                 var price = JsonConvert.DeserializeObject<List<PriceInfo>>(candleinfo);
 
-
                 if (Convert.ToDouble(parameters[0]) >= Convert.ToDouble(price[0].trade_price.ToString()))
                 {
                     this.Invoke(new MethodInvoker(delegate ()
@@ -145,9 +142,7 @@ namespace CoinCopy
                     break;
                 }
 
-
                 Delay(500);
-
             }
         }
 
@@ -160,7 +155,6 @@ namespace CoinCopy
             mForm.calculation();
 
             MessageBox.Show("매수 채결");
-
         }
         private static DateTime Delay(int MS)
         {
@@ -187,19 +181,24 @@ namespace CoinCopy
         {
             while (true)
             {
-                WebClient tempclient = new WebClient();
-                tempclient.Encoding = Encoding.UTF8;
-
-                string tempurl = priceurl + code + "&count=1";
-                var candleinfo = tempclient.DownloadString(tempurl);
-                var price = JsonConvert.DeserializeObject<List<PriceInfo>>(candleinfo);
-
-
-                this.Invoke(new MethodInvoker(delegate ()
+                try
                 {
-                    if (rdoMarketPrice.Checked)
-                        priceTextBox.Text = price[0].trade_price.ToString();
-                }));
+                    WebClient tempclient = new WebClient();
+                    tempclient.Encoding = Encoding.UTF8;
+
+                    string tempurl = priceurl + code + "&count=1";
+                    var candleinfo = tempclient.DownloadString(tempurl);
+                    var price = JsonConvert.DeserializeObject<List<PriceInfo>>(candleinfo);
+
+                    this.Invoke(new MethodInvoker(delegate ()
+                    {
+                        if (rdoMarketPrice.Checked)
+                            priceTextBox.Text = price[0].trade_price.ToString();
+                    }));
+                } catch (Exception e)
+                {
+
+                }
 
                 Delay(500);
 

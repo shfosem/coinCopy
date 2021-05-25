@@ -14,7 +14,7 @@ namespace CoinCopy
         // 보유 현금
         private double cash;
 
-        //손익 금액 ( purchase - totalPrice ) 
+        //손익 금액 (totalPrice - purchaseCost ) 
         private double profit;
 
         //매입 금액
@@ -22,6 +22,9 @@ namespace CoinCopy
 
         //유가 총액 ( 현시점 기준으로 보유한 주식의 현 시가의 총합 )
         private double currentTotalPrice;
+
+        //수익률
+        private double profitPercentage;
 
         public balance()
         {
@@ -31,6 +34,22 @@ namespace CoinCopy
             profit = 0;
             purchaseAmount = 0;
             currentTotalPrice = 0;
+            profitPercentage = 0;
+        }
+
+        public double getProfitPercentage()
+        {
+            return this.profitPercentage;
+        }
+
+        public void setProfitPercentage(double percentage)
+        {
+            this.profitPercentage = percentage; 
+        }
+
+        public void profitPercentageCalculation()
+        {
+            this.profitPercentage = this.profit / this.purchaseAmount * 100;
         }
 
         public double getTotalAsset()

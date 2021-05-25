@@ -215,7 +215,7 @@ namespace CoinCopy
             // profit_txt
             // 
             this.profit_txt.AutoSize = true;
-            this.profit_txt.Location = new System.Drawing.Point(55, 106);
+            this.profit_txt.Location = new System.Drawing.Point(35, 106);
             this.profit_txt.Name = "profit_txt";
             this.profit_txt.Size = new System.Drawing.Size(11, 12);
             this.profit_txt.TabIndex = 12;
@@ -327,6 +327,7 @@ namespace CoinCopy
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "mainForm";
             this.Text = "Main";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainForm_FormClosing);
             this.Load += new System.EventHandler(this.main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.balanceDgv)).EndInit();
             this.cms.ResumeLayout(false);
