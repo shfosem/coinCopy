@@ -9,7 +9,8 @@ namespace CoinCopy
     public class buyData
     {
         public string stockName;
-        public decimal buyQuantity;
-        public decimal buyCost;        
+        public double buyQuantity;
+        public double buyCost;
+        
     }
 }

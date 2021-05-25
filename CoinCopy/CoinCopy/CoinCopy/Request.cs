@@ -19,10 +19,10 @@ namespace CoinCopy
         class PriceInfo
         {
             public DateTime candle_date_time_kst { get; set; }
-            public decimal opening_price { get; set; }
-            public decimal high_price { get; set; }
-            public decimal low_price { get; set; }
-            public decimal trade_price { get; set; }
+            public double opening_price { get; set; }
+            public double high_price { get; set; }
+            public double low_price { get; set; }
+            public double trade_price { get; set; }
         }
 
 
@@ -64,13 +64,13 @@ namespace CoinCopy
 
            if (selection == 0 && stockNumberTextBox.Text != null)
            {
-                decimal howMany = decimal.Parse(stockNumberTextBox.Text);
+                double howMany = Double.Parse(stockNumberTextBox.Text);
                
                 if (rdoMarketPrice.Checked)
                 {
-                    decimal marketPricedecimal = decimal.Parse(marketPrice); 
-                    //decimal marketPricedecimal = Convert.Todecimal(priceTextBox.Text);
-                    decimal totalCost = howMany * marketPricedecimal;
+                    //double marketPriceDouble = Double.Parse(marketPrice); =>
+                    double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
+                    double totalCost = howMany * marketPriceDouble;
                     
                     if (userBalance.getCash() < totalCost)
                     {
@@ -80,8 +80,7 @@ namespace CoinCopy
 
                     mForm.buy_data.buyQuantity = howMany;
                     //market price need to keep changing
-                    //market price need to keep changing
-                    mForm.buy_data.buyCost = marketPricedecimal;
+                    mForm.buy_data.buyCost = marketPriceDouble;
                     mForm.calculation();
 
                     MessageBox.Show("매수 채결");                    
@@ -89,9 +88,8 @@ namespace CoinCopy
                 }
                 else if (rdoCustomPrice.Checked)
                 {
-                    
-                    decimal marketPricedecimal = decimal.Parse(priceTextBox.Text);
-                    decimal totalCost = howMany * marketPricedecimal;
+                    double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
+                    double totalCost = howMany * marketPriceDouble;
 
                     List<object> parameters = new List<object>();
 
@@ -101,7 +99,7 @@ namespace CoinCopy
                         return;
                     }
 
-                    parameters.Add(marketPricedecimal);
+                    parameters.Add(marketPriceDouble);
                     parameters.Add(howMany);
 
                     Thread buylimit = new Thread(new ParameterizedThreadStart(limitOrder_BuyingPoint));
@@ -111,9 +109,9 @@ namespace CoinCopy
 
            if ( selection == 1 && stockNumberTextBox.Text != null)
            {
-                decimal howMany = decimal.Parse(stockNumberTextBox.Text);
-                decimal marketPricedecimal = decimal.Parse(priceTextBox.Text);
-                decimal totalCost = howMany * marketPricedecimal;
+                double howMany = Double.Parse(stockNumberTextBox.Text);
+                double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
+                double totalCost = howMany * marketPriceDouble;
 
                 mForm.sell_data.stockName = this.coinName;
                 mForm.sell_data.sellCost = totalCost;
@@ -126,7 +124,7 @@ namespace CoinCopy
                     MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);                   
                 } 
 
-                
+
            }
 
 
@@ -172,12 +170,9 @@ namespace CoinCopy
         private void limitOrder_Buy(object obj)
         {
             List<object> parameters = obj as List<object>;
-            double a = Convert.ToDouble(parameters[1]);
-            mForm.buy_data.buyQuantity = (decimal)a;
+            mForm.buy_data.buyQuantity = Convert.ToDouble(parameters[1]);
             //market price need to keep changing
-            double b = Convert.ToDouble(parameters[0]);
-            mForm.buy_data.buyCost = (decimal)b;
-
+            mForm.buy_data.buyCost = Convert.ToDouble(parameters[0]);
             mForm.calculation();
 
             MessageBox.Show("매수 채결");

@@ -32,12 +32,12 @@ namespace CoinCopy
             buy_data = new buyData();
             sell_data = new sellData();
             
-            decimal totalAsset = userBalance.getTotalAsset();
-            decimal cash = userBalance.getCash();
-            decimal profitPercent = userBalance.calcProfitPercentage();
-            decimal profit = userBalance.getProfit();
-            decimal purchase = userBalance.getPurchaseAmount();
-            decimal currentTotalPrice = userBalance.getCurrentTotalPrice();
+            double totalAsset = userBalance.getTotalAsset();
+            double cash = userBalance.getCash();
+            double profitPercent = userBalance.calcProfitPercentage();
+            double profit = userBalance.getProfit();
+            double purchase = userBalance.getPurchaseAmount();
+            double currentTotalPrice = userBalance.getCurrentTotalPrice();
 
             lblBalance.Text = totalAsset.ToString();
             lbl_percent.Text = "0%";
@@ -49,10 +49,10 @@ namespace CoinCopy
         class PriceInfo
         {
             public DateTime candle_date_time_kst { get; set; }
-            public decimal opening_price { get; set; }
-            public decimal high_price { get; set; }
-            public decimal low_price { get; set; }
-            public decimal trade_price { get; set; }
+            public double opening_price { get; set; }
+            public double high_price { get; set; }
+            public double low_price { get; set; }
+            public double trade_price { get; set; }
         }
 
         private void main_Load(object sender, EventArgs e)
@@ -86,12 +86,12 @@ namespace CoinCopy
         {
             // 잔고 초기화
             userBalance = new balance();
-            decimal totalAsset = userBalance.getTotalAsset();
-            decimal cash = userBalance.getCash();
-            decimal profitPercent = userBalance.calcProfitPercentage();
-            decimal profit = userBalance.getProfit();
-            decimal purchase = userBalance.getPurchaseAmount();
-            decimal currentTotalPrice = userBalance.getCurrentTotalPrice();
+            double totalAsset = userBalance.getTotalAsset();
+            double cash = userBalance.getCash();
+            double profitPercent = userBalance.calcProfitPercentage();
+            double profit = userBalance.getProfit();
+            double purchase = userBalance.getPurchaseAmount();
+            double currentTotalPrice = userBalance.getCurrentTotalPrice();
 
             lblBalance.Text = totalAsset.ToString();
             lbl_percent.Text = "0%";
@@ -104,12 +104,12 @@ namespace CoinCopy
 
         public void setBalance(balance bl)
         {
-            decimal totalAsset = bl.getTotalAsset();
-            decimal cash = bl.getCash();
-            decimal profitPercent = bl.calcProfitPercentage();
-            decimal profit = bl.getProfit();
-            decimal purchase = bl.getPurchaseAmount();
-            decimal currentTotalPrice = bl.getCurrentTotalPrice();
+            double totalAsset = bl.getTotalAsset();
+            double cash = bl.getCash();
+            double profitPercent = bl.calcProfitPercentage();
+            double profit = bl.getProfit();
+            double purchase = bl.getPurchaseAmount();
+            double currentTotalPrice = bl.getCurrentTotalPrice();
 
             lblBalance.Text = totalAsset.ToString();
             lbl_percent.Text = profitPercent.ToString();
@@ -144,24 +144,24 @@ namespace CoinCopy
 
             if (checkExistance == 0 )
             {
-                decimal totalCost = buy_data.buyCost * buy_data.buyQuantity;
+                double totalCost = buy_data.buyCost * buy_data.buyQuantity;
                 balanceDgv.Rows.Add(buy_data.stockName, buy_data.buyQuantity, buy_data.buyCost , buy_data.buyCost, 0, 0, totalCost, totalCost);
             } else if (checkExistance == 1)
             {
-                decimal totalCost = (decimal)tempRow.Cells[7].Value + buy_data.buyCost * buy_data.buyQuantity;
-                decimal valuationCost = (decimal)tempRow.Cells[6].Value + buy_data.buyCost * buy_data.buyQuantity;
+                double totalCost = (double)tempRow.Cells[7].Value + buy_data.buyCost * buy_data.buyQuantity;
+                double valuationCost = (double)tempRow.Cells[6].Value + buy_data.buyCost * buy_data.buyQuantity;
 
-                tempRow.Cells[1].Value = (decimal)tempRow.Cells[1].Value + buy_data.buyQuantity;               
-                tempRow.Cells[3].Value = totalCost / (decimal)tempRow.Cells[1].Value;              
+                tempRow.Cells[1].Value = (double)tempRow.Cells[1].Value + buy_data.buyQuantity;               
+                tempRow.Cells[3].Value = totalCost / (double)tempRow.Cells[1].Value;              
                 tempRow.Cells[6].Value = valuationCost;
                 tempRow.Cells[7].Value = totalCost;
             }
 
-            decimal cash = userBalance.getCash();
+            double cash = userBalance.getCash();
             cash -= buy_data.buyCost * buy_data.buyQuantity;
             userBalance.setCash(cash);
 
-            decimal totalBuyCost = userBalance.getPurchaseAmount();
+            double totalBuyCost = userBalance.getPurchaseAmount();
             totalBuyCost += buy_data.buyCost * buy_data.buyQuantity;
             userBalance.setPurchaseAmount(totalBuyCost);            
 
@@ -169,23 +169,23 @@ namespace CoinCopy
 
         public void updateUserBalance()
         {
-            decimal ta = userBalance.getTotalAsset();
+            double ta = userBalance.getTotalAsset();
             lblBalance.Text = ta.ToString();
             
-            decimal percent = userBalance.getProfitPercentage();
+            double percent = userBalance.getProfitPercentage();
             lbl_percent.Text = percent.ToString();
 
-            decimal profit = userBalance.getProfit();
+            double profit = userBalance.getProfit();
             profit *= -1;
             profit_txt.Text = profit.ToString();            
 
-            decimal purchase = userBalance.getPurchaseAmount();
+            double purchase = userBalance.getPurchaseAmount();
             purchase_txt.Text = purchase.ToString();
 
-            decimal evaluated = userBalance.getCurrentTotalPrice();
+            double evaluated = userBalance.getCurrentTotalPrice();
             evaluated_txt.Text = evaluated.ToString();
 
-            decimal cash = userBalance.getCash();
+            double cash = userBalance.getCash();
             cash_txt.Text = cash.ToString();
 
         }
@@ -195,7 +195,7 @@ namespace CoinCopy
         {
             while (true)
             {
-                decimal totalEvalStockPrice = 0;                               
+                double totalEvalStockPrice = 0;                               
 
                 for (int i = 0; i < balanceDgv.Rows.Count; i++)
                 {
@@ -218,12 +218,12 @@ namespace CoinCopy
                             tempRow = balanceDgv.Rows[i];
                             code = (string)tempRow.Cells[0].Value;
 
-                            decimal quantity = (decimal)tempRow.Cells[1].Value;
-                            decimal currentPrice = price[0].trade_price;
-                            decimal evalPrice = quantity * currentPrice;
-                            decimal buyPrice = (decimal)tempRow.Cells[7].Value;
-                            decimal evalProfit = evalPrice - buyPrice;
-                            decimal profitPercentage = evalProfit / buyPrice * 100;
+                            double quantity = (double)tempRow.Cells[1].Value;
+                            double currentPrice = price[0].trade_price;
+                            double evalPrice = quantity * currentPrice;
+                            double buyPrice = (double)tempRow.Cells[7].Value;
+                            double evalProfit = evalPrice - buyPrice;
+                            double profitPercentage = evalProfit / buyPrice * 100;
 
                             totalEvalStockPrice += evalPrice;                                                    
 
@@ -261,13 +261,13 @@ namespace CoinCopy
 
                 // ***  잔고 업데이트   ***
 
-                decimal cash = userBalance.getCash();
+                double cash = userBalance.getCash();
 
                 userBalance.setTotalAsset(cash + totalEvalStockPrice);     
                
                 userBalance.setCurrentTotalPrice(totalEvalStockPrice);
 
-                decimal totalProfit = userBalance.getCurrentTotalPrice() - userBalance.getPurchaseAmount();
+                double totalProfit = userBalance.getCurrentTotalPrice() - userBalance.getPurchaseAmount();
                 userBalance.setProfit(totalProfit);
 
                 userBalance.profitPercentageCalculation();
@@ -308,30 +308,24 @@ namespace CoinCopy
 
             DataGridViewRow tempRow = new DataGridViewRow();
 
-            for (i = 0; i < balanceDgv.Rows.Count; i++) {
+            for (i = 0; i < balanceDgv.Rows.Count; i++)
+            {
                 tempRow = balanceDgv.Rows[i];
-                if ((string)tempRow.Cells[0].Value == sell_data.stockName) {
+                if ((string)tempRow.Cells[0].Value == sell_data.stockName)
+                {
                     checkExistance = 1;
                     break;
                 }
             }
 
-            if (checkExistance == 0) return 0;
+            if (checkExistance == 0)
+                return 0;
 
-            if (sell_data.sellQuantity > (decimal)tempRow.Cells[1].Value) return 1;
-                                 
-
-            int amount = (int)tempRow.Cells[1].Value;
-            int totalAsset = (int)tempRow.Cells[7].Value;
-
-            amount = amount - (int)(sell_data.sellQuantity);
-            totalAsset = totalAsset - (int)(sell_data.sellCost) * (int)(sell_data.sellQuantity);
-
-            tempRow.Cells[1].Value = (int)amount;
-            tempRow.Cells[7].Value = (int)(totalAsset);
+            if (sell_data.sellQuantity > (double)tempRow.Cells[1].Value)
+                return 1;
 
             
-            
+
             return 2;
         }
 
