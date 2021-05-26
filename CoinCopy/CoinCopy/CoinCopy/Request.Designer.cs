@@ -37,7 +37,10 @@ namespace CoinCopy
             this.rdoCustomPrice = new System.Windows.Forms.RadioButton();
             this.rdoMarketPrice = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.order_grpbox = new System.Windows.Forms.GroupBox();
+            this.order_panel = new System.Windows.Forms.Panel();
             this.grpPrice.SuspendLayout();
+            this.order_grpbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbRequest
@@ -128,11 +131,31 @@ namespace CoinCopy
             this.label1.TabIndex = 4;
             this.label1.Text = "수량";
             // 
+            // order_grpbox
+            // 
+            this.order_grpbox.Controls.Add(this.order_panel);
+            this.order_grpbox.Location = new System.Drawing.Point(11, 189);
+            this.order_grpbox.Name = "order_grpbox";
+            this.order_grpbox.Size = new System.Drawing.Size(437, 215);
+            this.order_grpbox.TabIndex = 5;
+            this.order_grpbox.TabStop = false;
+            this.order_grpbox.Text = "지정가 주문";
+            // 
+            // order_panel
+            // 
+            this.order_panel.AutoScroll = true;
+            this.order_panel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.order_panel.Location = new System.Drawing.Point(3, 21);
+            this.order_panel.Name = "order_panel";
+            this.order_panel.Size = new System.Drawing.Size(431, 191);
+            this.order_panel.TabIndex = 0;
+            // 
             // Request
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 198);
+            this.ClientSize = new System.Drawing.Size(474, 416);
+            this.Controls.Add(this.order_grpbox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.grpPrice);
             this.Controls.Add(this.stockNumberTextBox);
@@ -145,6 +168,7 @@ namespace CoinCopy
             this.Load += new System.EventHandler(this.Request_Load);
             this.grpPrice.ResumeLayout(false);
             this.grpPrice.PerformLayout();
+            this.order_grpbox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,5 +184,7 @@ namespace CoinCopy
         private System.Windows.Forms.RadioButton rdoCustomPrice;
         private System.Windows.Forms.RadioButton rdoMarketPrice;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox order_grpbox;
+        private System.Windows.Forms.Panel order_panel;
     }
 }
