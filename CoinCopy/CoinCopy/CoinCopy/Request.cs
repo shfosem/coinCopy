@@ -83,7 +83,7 @@ namespace CoinCopy
                     mForm.buy_data.buyCost = marketPriceLong;
                     mForm.calculation();
 
-                    MessageBox.Show("매수 채결");                    
+                    MessageBox.Show("매수 체결되었습니다");                    
                     //this.Close();
                 }
                 else if (rdoCustomPrice.Checked)
@@ -113,7 +113,8 @@ namespace CoinCopy
                 long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
                 long totalCost = howMany * marketPriceLong;
 
-                mForm.sell_data.stockName = this.coinName;
+                // stockName 단순이름에서 market name으로 변경하였습니다 coinName -> code
+                mForm.sell_data.stockName = this.code;
                 mForm.sell_data.sellCost = totalCost;
                 mForm.sell_data.sellQuantity = howMany;
 
@@ -126,10 +127,13 @@ namespace CoinCopy
                 {
                     MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else if (result == 2)
+                {
+                    MessageBox.Show("매도 체결되었습니다.");
+                }
 
 
-
-           }
+            }
 
         }
 
@@ -178,7 +182,7 @@ namespace CoinCopy
             mForm.buy_data.buyCost = Convert.ToInt64(parameters[0]);
             mForm.calculation();
 
-            MessageBox.Show("매수 채결");
+            MessageBox.Show("매수 체결되었습니다.");
         }
         private static DateTime Delay(int MS)
         {

@@ -72,16 +72,21 @@ namespace CoinCopy
 
         private void cmsRequest_Click(object sender, EventArgs e)
         {
-            //Request requestform = new Request("","", userBalance, this);
-            //requestform.Owner = this;
-            //requestform.Show();
+            int n = balanceDgv.SelectedRows[0].Index;
+            Request r = new Request(code, balanceDgv.Rows[n].Cells[0].ToString(), balanceDgv.Rows[n].Cells[2].Value.ToString(), this.userBalance, this);
+            r.Owner = this;
+            r.Show();
         }
 
         private void cms_chart_Click(object sender, EventArgs e)
         {
-            Chart chartform = new Chart(this);
-            chartform.Owner = this;
-            chartform.Show();
+            int n = balanceDgv.SelectedRows[0].Index;
+            Chart chart = new Chart(this);
+            chart.Owner = this.Owner;
+            chart.lblName.Text = balanceDgv.Rows[n].Cells[0].Value.ToString();
+            chart.lblPrice.Text = balanceDgv.Rows[n].Cells[2].Value.ToString();
+            chart.code = balanceDgv.Rows[n].Cells[0].Value.ToString();
+            chart.Show();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -358,5 +363,21 @@ namespace CoinCopy
             return 2;
         }
 
+        private void balanceDgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            balanceDgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        private void balanceDgv_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int n = balanceDgv.SelectedRows[0].Index;
+            Chart chart = new Chart(this);
+            chart.Owner = this.Owner;
+            chart.lblName.Text = balanceDgv.Rows[n].Cells[0].Value.ToString();
+            chart.lblPrice.Text = balanceDgv.Rows[n].Cells[2].Value.ToString();
+            chart.code = balanceDgv.Rows[n].Cells[0].Value.ToString();
+            chart.Show();
+
+        }
     }
 }
