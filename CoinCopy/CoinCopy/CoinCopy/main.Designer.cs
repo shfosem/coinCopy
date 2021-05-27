@@ -31,25 +31,15 @@ namespace CoinCopy
         {
             this.components = new System.ComponentModel.Container();
             this.balanceDgv = new System.Windows.Forms.DataGridView();
-            this.CoinName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.current_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.avg_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profit_per = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profit_won = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.evaluated_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.purchase_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cms_chart = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRequest = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBalance = new System.Windows.Forms.GroupBox();
             this.cash_txt = new System.Windows.Forms.Label();
             this.evaluated_txt = new System.Windows.Forms.Label();
-            this.purchase_txt = new System.Windows.Forms.Label();
             this.profit_txt = new System.Windows.Forms.Label();
             this.label = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_percent = new System.Windows.Forms.Label();
             this.lbl_profit = new System.Windows.Forms.Label();
@@ -57,6 +47,16 @@ namespace CoinCopy
             this.lblBalance = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.lblPurchase = new System.Windows.Forms.Label();
+            this.lblPurchaseNumber = new System.Windows.Forms.Label();
+            this.CoinName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.current_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.avg_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profit_per = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.profit_won = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.evaluated_price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.purchaseCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.balanceDgv)).BeginInit();
             this.cms.SuspendLayout();
             this.grpBalance.SuspendLayout();
@@ -73,71 +73,15 @@ namespace CoinCopy
             this.profit_per,
             this.profit_won,
             this.evaluated_price,
-            this.purchase_price});
+            this.purchaseCost});
             this.balanceDgv.ContextMenuStrip = this.cms;
-            this.balanceDgv.Location = new System.Drawing.Point(12, 207);
+            this.balanceDgv.Location = new System.Drawing.Point(21, 215);
             this.balanceDgv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.balanceDgv.Name = "balanceDgv";
             this.balanceDgv.RowHeadersWidth = 51;
             this.balanceDgv.RowTemplate.Height = 27;
             this.balanceDgv.Size = new System.Drawing.Size(636, 122);
             this.balanceDgv.TabIndex = 0;
-            // 
-            // CoinName
-            // 
-            this.CoinName.HeaderText = "종목명";
-            this.CoinName.MinimumWidth = 6;
-            this.CoinName.Name = "CoinName";
-            this.CoinName.Width = 125;
-            // 
-            // number
-            // 
-            this.number.HeaderText = "보유수량";
-            this.number.MinimumWidth = 6;
-            this.number.Name = "number";
-            this.number.Width = 125;
-            // 
-            // current_price
-            // 
-            this.current_price.HeaderText = "현재가";
-            this.current_price.MinimumWidth = 6;
-            this.current_price.Name = "current_price";
-            this.current_price.Width = 125;
-            // 
-            // avg_price
-            // 
-            this.avg_price.HeaderText = "평균가";
-            this.avg_price.MinimumWidth = 6;
-            this.avg_price.Name = "avg_price";
-            this.avg_price.Width = 125;
-            // 
-            // profit_per
-            // 
-            this.profit_per.HeaderText = "손익률";
-            this.profit_per.MinimumWidth = 6;
-            this.profit_per.Name = "profit_per";
-            this.profit_per.Width = 125;
-            // 
-            // profit_won
-            // 
-            this.profit_won.HeaderText = "평가손익";
-            this.profit_won.MinimumWidth = 6;
-            this.profit_won.Name = "profit_won";
-            this.profit_won.Width = 125;
-            // 
-            // evaluated_price
-            // 
-            this.evaluated_price.HeaderText = "평가금액";
-            this.evaluated_price.MinimumWidth = 6;
-            this.evaluated_price.Name = "evaluated_price";
-            this.evaluated_price.Width = 125;
-            // 
-            // purchase_price
-            // 
-            this.purchase_price.HeaderText = "매입금액";
-            this.purchase_price.MinimumWidth = 6;
-            this.purchase_price.Name = "purchase_price";
-            this.purchase_price.Width = 125;
             // 
             // cms
             // 
@@ -164,13 +108,13 @@ namespace CoinCopy
             // 
             // grpBalance
             // 
+            this.grpBalance.Controls.Add(this.lblPurchaseNumber);
+            this.grpBalance.Controls.Add(this.lblPurchase);
             this.grpBalance.Controls.Add(this.cash_txt);
             this.grpBalance.Controls.Add(this.evaluated_txt);
-            this.grpBalance.Controls.Add(this.purchase_txt);
             this.grpBalance.Controls.Add(this.profit_txt);
             this.grpBalance.Controls.Add(this.label);
             this.grpBalance.Controls.Add(this.label3);
-            this.grpBalance.Controls.Add(this.label2);
             this.grpBalance.Controls.Add(this.label1);
             this.grpBalance.Controls.Add(this.lbl_percent);
             this.grpBalance.Controls.Add(this.lbl_profit);
@@ -188,7 +132,7 @@ namespace CoinCopy
             // cash_txt
             // 
             this.cash_txt.AutoSize = true;
-            this.cash_txt.Location = new System.Drawing.Point(350, 106);
+            this.cash_txt.Location = new System.Drawing.Point(362, 106);
             this.cash_txt.Name = "cash_txt";
             this.cash_txt.Size = new System.Drawing.Size(11, 12);
             this.cash_txt.TabIndex = 15;
@@ -197,20 +141,11 @@ namespace CoinCopy
             // evaluated_txt
             // 
             this.evaluated_txt.AutoSize = true;
-            this.evaluated_txt.Location = new System.Drawing.Point(265, 106);
+            this.evaluated_txt.Location = new System.Drawing.Point(230, 106);
             this.evaluated_txt.Name = "evaluated_txt";
             this.evaluated_txt.Size = new System.Drawing.Size(11, 12);
             this.evaluated_txt.TabIndex = 14;
             this.evaluated_txt.Text = "0";
-            // 
-            // purchase_txt
-            // 
-            this.purchase_txt.AutoSize = true;
-            this.purchase_txt.Location = new System.Drawing.Point(160, 106);
-            this.purchase_txt.Name = "purchase_txt";
-            this.purchase_txt.Size = new System.Drawing.Size(11, 12);
-            this.purchase_txt.TabIndex = 13;
-            this.purchase_txt.Text = "0";
             // 
             // profit_txt
             // 
@@ -224,7 +159,7 @@ namespace CoinCopy
             // label
             // 
             this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(350, 77);
+            this.label.Location = new System.Drawing.Point(376, 77);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(53, 12);
             this.label.TabIndex = 11;
@@ -233,20 +168,11 @@ namespace CoinCopy
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(245, 77);
+            this.label3.Location = new System.Drawing.Point(240, 77);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 12);
             this.label3.TabIndex = 10;
             this.label3.Text = "유가총액";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(140, 77);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 12);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "매입금액";
             // 
             // label1
             // 
@@ -315,11 +241,83 @@ namespace CoinCopy
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
+            // lblPurchase
+            // 
+            this.lblPurchase.AutoSize = true;
+            this.lblPurchase.Location = new System.Drawing.Point(132, 76);
+            this.lblPurchase.Name = "lblPurchase";
+            this.lblPurchase.Size = new System.Drawing.Size(53, 12);
+            this.lblPurchase.TabIndex = 16;
+            this.lblPurchase.Text = "매입금액";
+            // 
+            // lblPurchaseNumber
+            // 
+            this.lblPurchaseNumber.AutoSize = true;
+            this.lblPurchaseNumber.Location = new System.Drawing.Point(120, 106);
+            this.lblPurchaseNumber.Name = "lblPurchaseNumber";
+            this.lblPurchaseNumber.Size = new System.Drawing.Size(11, 12);
+            this.lblPurchaseNumber.TabIndex = 17;
+            this.lblPurchaseNumber.Text = "0";
+            // 
+            // CoinName
+            // 
+            this.CoinName.HeaderText = "종목명";
+            this.CoinName.MinimumWidth = 6;
+            this.CoinName.Name = "CoinName";
+            this.CoinName.Width = 125;
+            // 
+            // number
+            // 
+            this.number.HeaderText = "보유수량";
+            this.number.MinimumWidth = 6;
+            this.number.Name = "number";
+            this.number.Width = 125;
+            // 
+            // current_price
+            // 
+            this.current_price.HeaderText = "현재가";
+            this.current_price.MinimumWidth = 6;
+            this.current_price.Name = "current_price";
+            this.current_price.Width = 125;
+            // 
+            // avg_price
+            // 
+            this.avg_price.HeaderText = "평균가";
+            this.avg_price.MinimumWidth = 6;
+            this.avg_price.Name = "avg_price";
+            this.avg_price.Width = 125;
+            // 
+            // profit_per
+            // 
+            this.profit_per.HeaderText = "손익률";
+            this.profit_per.MinimumWidth = 6;
+            this.profit_per.Name = "profit_per";
+            this.profit_per.Width = 125;
+            // 
+            // profit_won
+            // 
+            this.profit_won.HeaderText = "평가손익";
+            this.profit_won.MinimumWidth = 6;
+            this.profit_won.Name = "profit_won";
+            this.profit_won.Width = 125;
+            // 
+            // evaluated_price
+            // 
+            this.evaluated_price.HeaderText = "평가금액";
+            this.evaluated_price.MinimumWidth = 6;
+            this.evaluated_price.Name = "evaluated_price";
+            this.evaluated_price.Width = 125;
+            // 
+            // purchaseCost
+            // 
+            this.purchaseCost.HeaderText = "매입금액";
+            this.purchaseCost.Name = "purchaseCost";
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(672, 360);
+            this.ClientSize = new System.Drawing.Size(669, 370);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.grpBalance);
             this.Controls.Add(this.balanceDgv);
@@ -347,16 +345,17 @@ namespace CoinCopy
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label;
         private System.Windows.Forms.Label cash_txt;
         private System.Windows.Forms.Label evaluated_txt;
-        private System.Windows.Forms.Label purchase_txt;
         private System.Windows.Forms.Label profit_txt;
         private System.Windows.Forms.ContextMenuStrip cms;
         private System.Windows.Forms.ToolStripMenuItem cms_chart;
         private System.Windows.Forms.ToolStripMenuItem cmsRequest;
+        internal System.Windows.Forms.Label lblBalance;
+        private System.Windows.Forms.Label lblPurchaseNumber;
+        private System.Windows.Forms.Label lblPurchase;
         private System.Windows.Forms.DataGridViewTextBoxColumn CoinName;
         private System.Windows.Forms.DataGridViewTextBoxColumn number;
         private System.Windows.Forms.DataGridViewTextBoxColumn current_price;
@@ -364,8 +363,7 @@ namespace CoinCopy
         private System.Windows.Forms.DataGridViewTextBoxColumn profit_per;
         private System.Windows.Forms.DataGridViewTextBoxColumn profit_won;
         private System.Windows.Forms.DataGridViewTextBoxColumn evaluated_price;
-        private System.Windows.Forms.DataGridViewTextBoxColumn purchase_price;
-        internal System.Windows.Forms.Label lblBalance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn purchaseCost;
     }
 }
 

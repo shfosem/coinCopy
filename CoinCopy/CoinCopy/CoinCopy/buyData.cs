@@ -9,8 +9,8 @@ namespace CoinCopy
     public class buyData
     {
         public string stockName;
-        public double buyQuantity;
-        public double buyCost;
+        public long buyQuantity;
+        public long buyCost;
         
     }
 }

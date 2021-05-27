@@ -76,7 +76,7 @@ namespace CoinCopy
             public string market { get; set; }
             public DateTime candle_date_time_utc { get; set; }
             public DateTime candle_date_time_kst { get; set; }
-            public double opening_price { get; set; }
+            public long opening_price { get; set; }
             public double high_price { get; set; }
             public double low_price { get; set; }
             public double trade_price { get; set; }

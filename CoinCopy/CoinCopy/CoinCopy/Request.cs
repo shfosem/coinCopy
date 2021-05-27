@@ -22,7 +22,7 @@ namespace CoinCopy
             public double opening_price { get; set; }
             public double high_price { get; set; }
             public double low_price { get; set; }
-            public double trade_price { get; set; }
+            public long trade_price { get; set; }
         }
 
 
@@ -33,9 +33,6 @@ namespace CoinCopy
         string code;
         string priceurl = "https://api.upbit.com/v1/trades/ticks?market=";
         Thread checkingmarketprice;
-        Thread order_control;
-
-        List<Thread> limitOrderList = new List<Thread>();
 
         public Request(string code, string coinName, string mPrice, balance uBalance, mainForm mF)
         {
@@ -47,18 +44,12 @@ namespace CoinCopy
             this.coinName = coinName;
             this.code = code;
             mForm = mF;
-
-
-            order_control = new Thread(new ThreadStart(Order_Control));
-            order_control.Start();
-
-
         }
 
         private void stockNumberTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // 숫자와 백스페이스, . 만 입력 받도록 하는 코드
-            if ( char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back) || ( e.KeyChar == '.' ) ) {
+            // 숫자와 백스페이스만 입력 받도록 하는 코드
+            if ( char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)  ) {
                 e.Handled = false;
             } else
                 e.Handled = true;            
@@ -73,13 +64,13 @@ namespace CoinCopy
 
            if (selection == 0 && stockNumberTextBox.Text != null)
            {
-                double howMany = Double.Parse(stockNumberTextBox.Text);
+                long howMany = long.Parse(stockNumberTextBox.Text);
                
                 if (rdoMarketPrice.Checked)
                 {
                     //double marketPriceDouble = Double.Parse(marketPrice); =>
-                    double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
-                    double totalCost = howMany * marketPriceDouble;
+                    long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
+                    long totalCost = howMany * marketPriceLong;
                     
                     if (userBalance.getCash() < totalCost)
                     {
@@ -89,7 +80,7 @@ namespace CoinCopy
 
                     mForm.buy_data.buyQuantity = howMany;
                     //market price need to keep changing
-                    mForm.buy_data.buyCost = marketPriceDouble;
+                    mForm.buy_data.buyCost = marketPriceLong;
                     mForm.calculation();
 
                     MessageBox.Show("매수 채결");                    
@@ -97,8 +88,8 @@ namespace CoinCopy
                 }
                 else if (rdoCustomPrice.Checked)
                 {
-                    double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
-                    double totalCost = howMany * marketPriceDouble;
+                    long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
+                    long totalCost = howMany * marketPriceLong;
 
                     List<object> parameters = new List<object>();
 
@@ -108,21 +99,19 @@ namespace CoinCopy
                         return;
                     }
 
-                    parameters.Add(marketPriceDouble);
+                    parameters.Add(marketPriceLong);
                     parameters.Add(howMany);
 
                     Thread buylimit = new Thread(new ParameterizedThreadStart(limitOrder_BuyingPoint));
                     buylimit.Start(parameters);
-                    limitOrderList.Add(buylimit);
-                    limitOrderList[limitOrderList.Count - 1].Name = "매수" + " " + howMany + " " + marketPriceDouble;
                 }
            }
 
            if ( selection == 1 && stockNumberTextBox.Text != null)
            {
-                double howMany = Double.Parse(stockNumberTextBox.Text);
-                double marketPriceDouble = Convert.ToDouble(priceTextBox.Text);
-                double totalCost = howMany * marketPriceDouble;
+                long howMany = long.Parse(stockNumberTextBox.Text);
+                long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
+                long totalCost = howMany * marketPriceLong;
 
                 mForm.sell_data.stockName = this.coinName;
                 mForm.sell_data.sellCost = totalCost;
@@ -133,11 +122,14 @@ namespace CoinCopy
                 if ( result == 0)
                 {
                     MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);                   
-                } 
+                } else if (result == 1 )
+                {
+                    MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
 
 
            }
-
 
         }
 
@@ -174,64 +166,20 @@ namespace CoinCopy
                     break;
                 }
 
-                Delay(1000);
+                Delay(500);
             }
         }
 
         private void limitOrder_Buy(object obj)
         {
             List<object> parameters = obj as List<object>;
-            mForm.buy_data.buyQuantity = Convert.ToDouble(parameters[1]);
+            mForm.buy_data.buyQuantity = Convert.ToInt64(parameters[1]);
             //market price need to keep changing
-            mForm.buy_data.buyCost = Convert.ToDouble(parameters[0]);
+            mForm.buy_data.buyCost = Convert.ToInt64(parameters[0]);
             mForm.calculation();
 
             MessageBox.Show("매수 채결");
         }
-
-
-        /*limitorder sell*/
-
-        public void limitOrder_SellingPoint(object obj)
-        {
-            List<object> parameters = obj as List<object>;
-
-            while (true)
-            {
-                WebClient tempclient = new WebClient();
-                tempclient.Encoding = Encoding.UTF8;
-
-                string tempurl = priceurl + code + "&count=1";
-                var candleinfo = tempclient.DownloadString(tempurl);
-                var price = JsonConvert.DeserializeObject<List<PriceInfo>>(candleinfo);
-
-                if (Convert.ToDouble(parameters[0]) <= Convert.ToDouble(price[0].trade_price.ToString()))
-                {
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        limitOrder_Sell(parameters);
-                    }));
-                    break;
-                }
-
-                Delay(1000);
-            }
-        }
-
-        private void limitOrder_Sell(object obj)
-        {
-            List<object> parameters = obj as List<object>;
-            mForm.sell_data.sellQuantity = Convert.ToDouble(parameters[1]);
-            mForm.sell_data.sellCost = Convert.ToDouble(parameters[0]);
-            mForm.calculation();
-
-            MessageBox.Show("매수 채결");
-        }
-
-
-        ///
-
-
         private static DateTime Delay(int MS)
         {
             DateTime ThisMoment = DateTime.Now;
@@ -284,84 +232,6 @@ namespace CoinCopy
         private void Request_FormClosing(object sender, FormClosingEventArgs e)
         {
             checkingmarketprice.Abort();
-            order_control.Abort();
-            for(int i = 0; i < limitOrderList.Count; i++)
-                limitOrderList[i].Abort();
-        }
-
-        private void Order_Control()
-        {
-            int tmp = 0;
-
-            int x_location_label = 10;
-            int x_location_btn = 300;
-            int y_location_label = 16;
-            int y_location_btn = 10;
-
-            while (true)
-            {
-                if(limitOrderList.Count != 0)
-                    for(int i = 0; i < limitOrderList.Count; i++)
-                        if (!limitOrderList[i].IsAlive)
-                            limitOrderList.RemoveAt(i);
-
-                if( tmp < limitOrderList.Count)
-                {
-                    Button mybutton = new Button();
-                    mybutton.Text = "주문 취소";
-                    mybutton.Name = tmp.ToString();
-                    mybutton.Location = new System.Drawing.Point(x_location_btn, y_location_btn);
-                    mybutton.Click += btnClick_Cancel_Order;
-
-                    //
-                    string[] orderinfo = limitOrderList[tmp].Name.Split(' ');
-                    //
-                    foreach (string str in orderinfo)
-                    {
-                        Label mylabel = new Label();
-                        mylabel.Text = str;
-                        mylabel.AutoSize = true;
-                        mylabel.Location = new System.Drawing.Point(x_location_label, y_location_label);
-                        x_location_label += 100;
-                        this.Invoke(new MethodInvoker(delegate ()
-                        {
-                            order_panel.Controls.Add(mylabel);
-                        }));
-                    }
-                    x_location_label = 10;
-
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        order_panel.Controls.Add(mybutton);
-                        //order_panel.Controls.Add(mylabel);
-                    }));
-
-                    y_location_btn += 30;
-                    y_location_label += 30;
-                    tmp++;
-                }
-                else if( tmp > limitOrderList.Count)
-                {
-                    this.Invoke(new MethodInvoker(delegate ()
-                    {
-                        order_panel.Controls.Clear();
-                    }));
-
-                    tmp = 0;
-                    y_location_btn = 10;
-                    y_location_label = 16;
-
-                }
-            }
-        }
-
-        private void btnClick_Cancel_Order(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            int num = Convert.ToInt32(btn.Name);
-
-            limitOrderList[num].Abort();
-            limitOrderList.RemoveAt(num);
         }
     }
 }

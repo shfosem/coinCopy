@@ -8,20 +8,23 @@ namespace CoinCopy
 {
     public class balance
     {
+
+        public long INIT_CASH = 100000000000;
+
         // 자산 ( 보유 현금 + 유가 총액 ) 
-        private double totalAsset;
+        private long totalAsset;
 
         // 보유 현금
-        private double cash;
+        private long cash;
 
         //손익 금액 (totalPrice - purchaseCost ) 
-        private double profit;
+        private long profit;
 
         //매입 금액
-        private double purchaseAmount;
+        private long purchaseAmount;
 
         //유가 총액 ( 현시점 기준으로 보유한 주식의 현 시가의 총합 )
-        private double currentTotalPrice;
+        private long currentTotalPrice;
 
         //수익률
         private double profitPercentage;
@@ -29,7 +32,7 @@ namespace CoinCopy
         public balance()
         {
             // 1억
-            cash = 100000000000;
+            cash = INIT_CASH;
             totalAsset = cash;
             profit = 0;
             purchaseAmount = 0;
@@ -49,54 +52,64 @@ namespace CoinCopy
 
         public void profitPercentageCalculation()
         {
-            this.profitPercentage = this.profit / this.purchaseAmount * 100;
+            try
+            {
+                double pp = Convert.ToDouble(this.profit);
+                double pa = Convert.ToDouble(INIT_CASH);
+                this.profitPercentage = Math.Round( pp / pa * 100,5);                
+
+            } catch (DivideByZeroException e)
+            {
+                this.profitPercentage = 0;
+            }
+            return;
         }
 
-        public double getTotalAsset()
+        public long getTotalAsset()
         {
             return this.totalAsset;
         }
-        public void setTotalAsset(double amount)
+        public void setTotalAsset(long amount)
         {
             this.totalAsset = amount;   
         }
 
 
-        public double getCash()
+        public long getCash()
         {
             return this.cash;
         }
-        public void setCash(double amount)
+        public void setCash(long amount)
         {
             this.cash = amount;
         }
 
 
-        public double getProfit()
+        public long getProfit()
         {
-            return (this.purchaseAmount - this.currentTotalPrice);
+            return this.profit;
         }
-        public void setProfit(double amount)
+        public void setProfit(long amount)
         {
             this.profit = amount;
         }
 
 
-        public double getPurchaseAmount()
+        public long getPurchaseAmount()
         {
             return this.purchaseAmount;
         }
-        public void setPurchaseAmount(double amount)
+        public void setPurchaseAmount(long amount)
         {
             this.purchaseAmount = amount;
         }
 
 
-        public double getCurrentTotalPrice()
+        public long getCurrentTotalPrice()
         {
             return this.currentTotalPrice;
         }
-        public void setCurrentTotalPrice(double amount)
+        public void setCurrentTotalPrice(long amount)
         {
             this.currentTotalPrice = amount;
         }
@@ -109,7 +122,9 @@ namespace CoinCopy
          */
         public double calcProfitPercentage()
         {
-            return Math.Round(this.profit / this.purchaseAmount * 100 , 3);
+            double profit = Convert.ToDouble(this.profit);
+            double pA = Convert.ToDouble(this.purchaseAmount);
+            return Math.Round(profit / pA * 100 , 3);
         }
     }
 }
