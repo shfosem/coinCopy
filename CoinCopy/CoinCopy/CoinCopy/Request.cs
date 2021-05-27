@@ -149,8 +149,9 @@ namespace CoinCopy
 
                 if (rdoMarketPrice.Checked)
                 {
-                    int result = mForm.sellCalc();
+                    mForm.sell_data.sellQuantity += coin_must_not_be_used;
 
+                    int result = mForm.beforesellCalc();
                     if (result == 0)
                     {
                         MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -161,7 +162,21 @@ namespace CoinCopy
                     }
                     else if (result == 2)
                     {
-                        MessageBox.Show("매도 체결되었습니다.");
+                        mForm.sell_data.sellQuantity -= coin_must_not_be_used;
+                        result = mForm.sellCalc();
+
+                        if (result == 0)
+                        {
+                            MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 1)
+                        {
+                            MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 2)
+                        {
+                            MessageBox.Show("매도 체결되었습니다.");
+                        }
                     }
                 }
 
