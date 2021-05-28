@@ -48,7 +48,6 @@ namespace CoinCopy
             this.code = code;
             mForm = mF;
 
-
             order_control = new Thread(new ThreadStart(Order_Control));
             order_control.Start();
 
@@ -73,21 +72,32 @@ namespace CoinCopy
            if (selection == 0 && stockNumberTextBox.Text != null)
            {
                 long howMany = long.Parse(stockNumberTextBox.Text);
-               
+
+                long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
+                long totalCost = howMany * marketPriceLong;
+
+                /*지정매수목록에 걸려있는 금액 계산*/
+                long money_must_not_be_used = 0;
+
+                foreach (Thread thr in limitOrderList)
+                {
+                    string[] orderinfo = thr.Name.Split(' ');
+                    if (orderinfo[0] == "매수")
+                        money_must_not_be_used += Convert.ToInt64(orderinfo[1]) * Convert.ToInt64(orderinfo[2]);
+                }
+                /*                                       */
+
                 if (rdoMarketPrice.Checked)
                 {
-                    //double marketPriceDouble = Double.Parse(marketPrice); =>
-                    long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
-                    long totalCost = howMany * marketPriceLong;
                     
-                    if (userBalance.getCash() < totalCost)
+                    
+                    if (userBalance.getCash() - money_must_not_be_used < totalCost)
                     {
                         MessageBox.Show("금액 부족\n" + "소유 현금 : " + userBalance.getCash() +"\n" + "가격 총합 : " + totalCost ,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
                     mForm.buy_data.buyQuantity = howMany;
-                    //market price need to keep changing
                     mForm.buy_data.buyCost = marketPriceLong;
                     mForm.calculation();
 
@@ -96,16 +106,13 @@ namespace CoinCopy
                 }
                 else if (rdoCustomPrice.Checked)
                 {
-                    long marketPriceLong = Convert.ToInt64(priceTextBox.Text);
-                    long totalCost = howMany * marketPriceLong;
-
-                    List<object> parameters = new List<object>();
-
-                    if (userBalance.getCash() < totalCost)
+                    if (userBalance.getCash() - money_must_not_be_used < totalCost)
                     {
                         MessageBox.Show("금액 부족\n" + "소유 현금 : " + userBalance.getCash() + "\n" + "가격 총합 : " + totalCost, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+
+                    List<object> parameters = new List<object>();
 
                     parameters.Add(marketPriceLong);
                     parameters.Add(howMany);
@@ -129,21 +136,78 @@ namespace CoinCopy
                 mForm.sell_data.sellCost = totalCost;
                 mForm.sell_data.sellQuantity = howMany;
 
-                int result = mForm.sellCalc();
+                /*지정매수목록에 걸려있는 코인 계산*/
+                long coin_must_not_be_used = 0;
 
-                if ( result == 0)
+                foreach (Thread thr in limitOrderList)
                 {
-                    MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);                   
-                } else if (result == 1 )
-                {
-                    MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string[] orderinfo = thr.Name.Split(' ');
+                    if (orderinfo[0] == "매도")
+                        coin_must_not_be_used += long.Parse(orderinfo[1]);
                 }
-                else if (result == 2)
+                /*                                       */
+
+                if (rdoMarketPrice.Checked)
                 {
-                    MessageBox.Show("매도 체결되었습니다.");
+                    mForm.sell_data.sellQuantity += coin_must_not_be_used;
+
+                    int result = mForm.beforesellCalc();
+                    if (result == 0)
+                    {
+                        MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (result == 1)
+                    {
+                        MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (result == 2)
+                    {
+                        mForm.sell_data.sellQuantity -= coin_must_not_be_used;
+                        result = mForm.sellCalc();
+
+                        if (result == 0)
+                        {
+                            MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 1)
+                        {
+                            MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (result == 2)
+                        {
+                            MessageBox.Show("매도 체결되었습니다.");
+                        }
+                    }
                 }
 
+                else if (rdoCustomPrice.Checked)
+                {
+                    mForm.sell_data.sellQuantity += coin_must_not_be_used;
 
+                    int result = mForm.beforesellCalc();
+                    if (result == 0)
+                    {
+                        MessageBox.Show("해당 코인이 없습니다!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (result == 1)
+                    {
+                        MessageBox.Show("코인 수가 부족합니다", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (result == 2)
+                    {
+                        List<object> parameters = new List<object>();
+                        parameters.Add(marketPriceLong);
+                        parameters.Add(totalCost);
+                        parameters.Add(howMany);
+                        parameters.Add(this.code);
+
+                        Thread selllimit = new Thread(new ParameterizedThreadStart(limitOrder_SellingPoint));
+                        selllimit.Start(parameters);
+
+                        limitOrderList.Add(selllimit);
+                        limitOrderList[limitOrderList.Count - 1].Name = "매도" + " " + howMany + " " + marketPriceLong;
+                    }
+                }
             }
 
         }
@@ -188,8 +252,14 @@ namespace CoinCopy
         private void limitOrder_Buy(object obj)
         {
             List<object> parameters = obj as List<object>;
+
+            if (userBalance.getCash() < Convert.ToInt64(parameters[0]) * Convert.ToInt64(parameters[1]))
+            {
+                MessageBox.Show("금액 부족", "매수 채결 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             mForm.buy_data.buyQuantity = Convert.ToInt64(parameters[1]);
-            //market price need to keep changing
             mForm.buy_data.buyCost = Convert.ToInt64(parameters[0]);
             mForm.calculation();
 
@@ -225,14 +295,26 @@ namespace CoinCopy
         private void limitOrder_Sell(object obj)
         {
             List<object> parameters = obj as List<object>;
-            mForm.sell_data.sellQuantity = Convert.ToInt64(parameters[1]);
-            mForm.sell_data.sellCost = Convert.ToInt64(parameters[0]);
-            mForm.calculation();
 
-            MessageBox.Show("매수 채결");
+            mForm.sell_data.stockName = parameters[3].ToString();
+            mForm.sell_data.sellCost = Convert.ToInt64(parameters[1]);
+            mForm.sell_data.sellQuantity = Convert.ToInt64(parameters[2]);
+
+            int result = mForm.sellCalc();
+
+            if (result == 0)
+            {
+                MessageBox.Show("해당 코인이 없습니다!", "매도 채결 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (result == 1)
+            {
+                MessageBox.Show("코인 수가 부족합니다", "매도 채결 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (result == 2)
+            {
+                MessageBox.Show("매도 체결되었습니다.");
+            }
         }
-
-        ///
 
         private static DateTime Delay(int MS)
         {
@@ -315,9 +397,9 @@ namespace CoinCopy
                     mybutton.Location = new System.Drawing.Point(x_location_btn, y_location_btn);
                     mybutton.Click += btnClick_Cancel_Order;
 
-                    //
+                    
                     string[] orderinfo = limitOrderList[tmp].Name.Split(' ');
-                    //
+                    
                     foreach (string str in orderinfo)
                     {
                         Label mylabel = new Label();
@@ -335,7 +417,6 @@ namespace CoinCopy
                     this.Invoke(new MethodInvoker(delegate ()
                     {
                         order_panel.Controls.Add(mybutton);
-                        //order_panel.Controls.Add(mylabel);
                     }));
 
                     y_location_btn += 30;

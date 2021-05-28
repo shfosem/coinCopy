@@ -362,6 +362,32 @@ namespace CoinCopy
 
             return 2;
         }
+        public int beforesellCalc()
+        {
+            int i = 0;
+            int checkExistance = 0;
+
+            DataGridViewRow tempRow = new DataGridViewRow();
+
+            for (i = 0; i < balanceDgv.Rows.Count; i++)
+            {
+                tempRow = balanceDgv.Rows[i];
+                if ((string)tempRow.Cells[0].Value == sell_data.stockName)
+                {
+                    checkExistance = 1;
+                    break;
+                }
+            }
+
+            if (checkExistance == 0)
+                return 0;
+
+            if (sell_data.sellQuantity > (long)tempRow.Cells[1].Value)
+                return 1;
+
+            return 2;
+
+        }
 
         private void balanceDgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

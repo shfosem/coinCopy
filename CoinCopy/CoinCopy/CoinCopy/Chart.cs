@@ -365,7 +365,6 @@ namespace CoinCopy
                         chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
                         chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
 
-                        //chart1.ResetAutoValues();
                     }));
                 }
                 else
@@ -386,24 +385,6 @@ namespace CoinCopy
                         chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
                         chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
                         chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
-                        /*
-                        //하나씩 뒤로 미는 작업
-                        for(int i = chart1.Series["Series1"].Points.Count - 1; i >0; i--)
-                        {
-                            chart1.Series["Series1"].Points[i].AxisLabel = chart1.Series["Series1"].Points[i - 1].AxisLabel;
-                            chart1.Series["Series1"].Points[i].YValues[1] = chart1.Series["Series1"].Points[i - 1].YValues[1];
-                            chart1.Series["Series1"].Points[i].YValues[2] = chart1.Series["Series1"].Points[i - 1].YValues[2];
-                            chart1.Series["Series1"].Points[i].YValues[3] = chart1.Series["Series1"].Points[i - 1].YValues[3];
-                        }
-
-                        //adding low / open / close
-                        chart1.Series["Series1"].Points[0].AxisLabel = price[0].candle_date_time_kst.ToString("dd HH:mm:ss");
-                        chart1.Series["Series1"].Points[0].YValues[1] = price[0].low_price;
-                        chart1.Series["Series1"].Points[0].YValues[2] = price[0].opening_price;
-                        chart1.Series["Series1"].Points[0].YValues[3] = price[0].trade_price;
-
-                        chart1.ResetAutoValues();
-                        */
 
                     }));
 
@@ -520,6 +501,9 @@ namespace CoinCopy
                     //{
                     this.Invoke(new MethodInvoker(delegate ()
                     {
+                        /*실시간 가격 변동*/
+                        this.lblPrice.Text = trade[0].trade_price.ToString();
+
                         trdlabel1.Text = strbld[0].ToString();
                         if (trade[0].ask_bid.ToString() == "ASK")
                             trdlabel1.ForeColor = Color.Red;
